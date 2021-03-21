@@ -17,7 +17,7 @@ public class ExpenseList {
     public double sumOfExpenses() {
         double sumOfExpenses = 0;
         for (Expense e: this.expenses) {
-            double amount = e.returnAmount();
+            double amount = e.getExpenseAmount();
             sumOfExpenses += amount;
         }
         return sumOfExpenses;

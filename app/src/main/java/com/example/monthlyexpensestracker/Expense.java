@@ -1,15 +1,21 @@
 package com.example.monthlyexpensestracker;
 
 public class Expense {
-    private double amount;
-    private String name;
+    private String expenseName;
+    private double expenseAmount;
 
-    public Expense(double amount) {
-        this.amount = amount;
+
+    public Expense(String expenseName, double expenseAmount) {
+        this.expenseName = expenseName;
+        this.expenseAmount = expenseAmount;
     }
 
-    public double returnAmount() {
-        return this.amount;
+    public String getExpenseName() {
+        return this.expenseName;
+    }
+
+    public double getExpenseAmount() {
+        return this.expenseAmount;
     }
 
 }
