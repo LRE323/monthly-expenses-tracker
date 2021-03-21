@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Monthly Expenses Tracker</string>
+    <string name="headerTotalText">Monthly expenses: $9876.54</string>
+    <string name="test_scrollable_text">THE LIST OF RECURRING EXPENSES GOES HERE TEST TEST TEST TEST
+        TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST</string>
+
+    <string name="title_activity_add_expense">AddExpense</string>
+</resources>
