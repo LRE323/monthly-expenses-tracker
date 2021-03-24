@@ -7,37 +7,44 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity {
-    //This LinkedList<String> will hold ONLY expenseNameTextView names for now.
-    //This is just to demonstrate how to use RecyclerView.
-    //In the final version, this LinkedList should hold all the expenses the user has created.
+    // Stores the Expense objects created by the user.
     private final LinkedList<Expense> expenses = new LinkedList<>();
+    private TextView headerTotal;
+    private TextView headerPaycheck;
+    private TextView headerPercent;
+
+
 
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter adapter;
+    private RecyclerViewAdapter recyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Add to expenses.
+        // Get a handle to all the TextView objects in LinearLayout headersHolder.
+        headerTotal = findViewById(R.id.headerTotal);
+        headerPaycheck = findViewById(R.id.headerPaycheck);
+        headerPercent = findViewById(R.id.headerPercent);
+
+        // Add dummy values to expenses.
         addDummyExpenses();
 
-        /*
-        for (int i = 1; i <= 15; i++) {
-            expenses.add("Expense " + i);
-        } */
+        // Set the text for the TextView objects in headersHolder.
+        setHeadersHolderText();
 
         // Get a handle to the RecyclerView.
         recyclerView = findViewById(R.id.recyclerView);
         // Create an adapter and supply the data to be displayed.
-        adapter = new RecyclerViewAdapter(this, expenses);
+        recyclerViewAdapter = new RecyclerViewAdapter(this, expenses);
         // Connect the adapter with the RecyclerView.
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(recyclerViewAdapter);
         // Give the RecyclerView a default layout manager.
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -46,11 +53,12 @@ public class MainActivity extends AppCompatActivity {
     public void testFabClick(View view) {
         //Create a new intent
         Intent intent = new Intent(this, AddExpenseActivity.class);
+        // Start the activity.
         startActivity(intent);
     }
 
     // Create and adds dummy expenses to the LinkedList expenses.
-    public void addDummyExpenses() {
+    private void addDummyExpenses() {
         // Dummy expenseAmount that will be modified for each Expense.
         double expenseAmount = 5;
         for (int i = 0; i < 15; i++) {
@@ -63,6 +71,36 @@ public class MainActivity extends AppCompatActivity {
             // Modify double expenseAmount.
             expenseAmount += 5;
         }
+    }
+
+    // Sets the text for all TextViews in the LinearLayout headersHolder.
+    private void setHeadersHolderText() {
+        setHeaderTotalText();
+        setHeaderPaycheckText();
+        setHeaderPercentText();
+    }
+
+    private void setHeaderTotalText() {
+        // Get the sum of all the monthly expenses.
+        double sumOfExpenses = 0;
+        for (Expense expense: expenses) {
+            // Get the current expense amount and add to sumOfExpenses.
+            double currentExpense = expense.getExpenseAmount();
+            sumOfExpenses += currentExpense;
+        }
+        // Set the text for TextView headerTotal.
+        String text = "Monthly expenses: $" + sumOfExpenses;
+        headerTotal.setText(text);
+    }
+
+    private void setHeaderPaycheckText() {
+        // TODO: Set the text in headerPaycheck with paycheck date info.
+        headerPaycheck.setText("You will pay $###.## between now and your next paycheck.");
+    }
+
+    private void setHeaderPercentText() {
+        // TODO: Set the text in headerPercent with paycheck amount info.
+        headerPercent.setText("Your monthly expenses make up ##% of your monthly income.");
     }
 
 }

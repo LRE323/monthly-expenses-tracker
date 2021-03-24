@@ -33,25 +33,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="@string/headerTotalText"
+            android:text=""
             android:textSize="@dimen/headerFontSize"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/header_paycheck"
+            android:id="@+id/headerPaycheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="You will pay $1234.56 between now and your next paycheck."
+            android:text=""
             android:textSize="@dimen/headerFontSize"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/header_percent"
+            android:id="@+id/headerPercent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="Your monthly expenses make up 24% of your monthly income."
+            android:text=""
             android:textSize="@dimen/headerFontSize"
             android:textStyle="bold" />
 
@@ -67,9 +67,9 @@
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingEnd="5dp"
-        android:paddingStart="5dp"
         android:layout_marginBottom="50dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

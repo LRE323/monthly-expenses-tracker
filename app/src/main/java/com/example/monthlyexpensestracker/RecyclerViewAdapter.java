@@ -17,8 +17,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private final LinkedList<Expense> expenses;
 
     //RecyclerViewAdapter needs a constructor that initializes the word list from the data.
-    //To create a View for a list item, the RecyclerViewAdapter needs to inflate the XML for a list item.
-    //You use a layout inflater for that job. LayoutInflater reads a layout XML description and converts
+    //LayoutInflater reads a layout XML description and converts
     //it into the corresponding View items.
     private LayoutInflater inflater;
 
@@ -41,19 +40,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     // The onBindViewHolder() method connects your data to the view holder.
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Get the current Expense.
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+        // Get the current Expense object .
         Expense currentExpense = expenses.get(position);
-        // Get the current expenseName
+        // Get the expense name and expense amount of currentExpense.
         String currentExpenseName = currentExpense.getExpenseName();
-        //Set expenseNameTextView text to currentExpenseName
-        holder.expenseNameTextView.setText(currentExpenseName);
-
-        // Get the current expenseAmount
         double currentExpenseAmount = currentExpense.getExpenseAmount();
-        //Set expenseAmountTextView text to currentExpenseAmount
-        holder.expenseAmountTextView.setText("$" + String.valueOf(currentExpenseAmount));
+        // TODO: Get the expense date
 
+        //Set the text for expenseNameTextView, expenseAmountTextView, and expenseDateTextView
+        viewHolder.expenseNameTextView.setText(currentExpenseName);
+        viewHolder.expenseAmountTextView.setText("$" + String.valueOf(currentExpenseAmount));
+        // TODO: Set the text for expenseDateTextView
     }
 
     @Override
@@ -66,15 +64,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public final TextView expenseNameTextView;
         public final TextView expenseAmountTextView;
         public final TextView expenseDateTextView;
-        final RecyclerViewAdapter adapter;
+        final RecyclerViewAdapter recyclerViewAdapter;
 
-        public ViewHolder(View itemView, RecyclerViewAdapter adapter) {
+        public ViewHolder(View itemView, RecyclerViewAdapter recyclerViewAdapter) {
             super(itemView);
-            // Initialize all TextViews in headersHolder
+            // Get a handle to all TextViews in headersHolder.
             expenseNameTextView = itemView.findViewById(R.id.expenseNameTextView);
             expenseAmountTextView = itemView.findViewById(R.id.expenseAmountTextView);
             expenseDateTextView = itemView.findViewById(R.id.expenseDateTextView);
-            this.adapter = adapter;
+
+            // Set the adapter.
+            this.recyclerViewAdapter = recyclerViewAdapter;
         }
     }
 
