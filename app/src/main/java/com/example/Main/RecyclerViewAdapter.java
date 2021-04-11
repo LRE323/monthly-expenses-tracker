@@ -1,14 +1,18 @@
-package com.example.monthlyexpensestracker;
+package com.example.Main;
 
 import android.content.Context;
-import android.icu.util.Calendar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.Main.Room.Expense;
+import com.example.monthlyexpensestracker.R;
 
 import java.util.LinkedList;
 
@@ -25,6 +29,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     //The constructor for RecyclerViewAdapter needs to have a context parameter, and a linked list
     //of words with the app's data. The method needs to instantiate a LayoutInflater for inflater
     //and set expenses to the passed in data.
+
     public RecyclerViewAdapter(Context context, LinkedList<Expense> expenses) {
         inflater = LayoutInflater.from(context);
         this.expenses = expenses;
@@ -49,12 +54,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         // Get the expense name, expense amount, and expense date of currentExpense.
         String currentExpenseName = currentExpense.getExpenseName();
         double currentExpenseAmount = currentExpense.getExpenseAmount();
-        String currentExpenseDate = currentExpense.getExpenseDateString();
+        String currentExpenseDate = currentExpense.getExpenseDate();
 
         //Set the text for expenseNameTextView, expenseAmountTextView, and expenseDateTextView
         viewHolder.expenseNameTextView.setText(currentExpenseName);
         viewHolder.expenseAmountTextView.setText("$" + String.valueOf(currentExpenseAmount));
         viewHolder.expenseDateTextView.setText(currentExpenseDate);
+
     }
 
     @Override

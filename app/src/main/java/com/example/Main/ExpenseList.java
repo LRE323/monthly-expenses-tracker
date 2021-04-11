@@ -1,4 +1,6 @@
-package com.example.monthlyexpensestracker;
+package com.example.Main;
+
+import com.example.Main.Room.Expense;
 
 import java.util.ArrayList;
 import java.util.List;

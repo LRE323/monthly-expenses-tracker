@@ -1,4 +1,4 @@
-package com.example.monthlyexpensestracker;
+package com.example.Main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +10,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import android.icu.util.Calendar;
+
+import com.example.Main.Room.Expense;
+import com.example.monthlyexpensestracker.R;
+
+import java.text.DateFormat;
 import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity {
@@ -65,12 +70,14 @@ public class MainActivity extends AppCompatActivity {
         double expenseAmount = 5;
 
         // Create a dummy Calendar expenseDate. Used for every expense created.
-        Calendar calendar = Calendar.getInstance();
+        Calendar expenseDateCalendar = Calendar.getInstance();
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
+        String expenseDateString = dateFormat.format( expenseDateCalendar.getTime() );
 
         for (int i = 0; i < 4; i++) {
 
             // Create a new dummy Expense.
-            Expense newExpense = new Expense("Expense " + i, expenseAmount, calendar);
+            Expense newExpense = new Expense("Expense " + i, expenseAmount, expenseDateString);
 
             // Get the name of the newly created Expense.
             String expenseName = newExpense.getExpenseName();

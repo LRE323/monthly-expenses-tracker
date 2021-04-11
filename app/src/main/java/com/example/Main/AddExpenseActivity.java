@@ -1,15 +1,12 @@
-package com.example.monthlyexpensestracker;
+package com.example.Main;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.monthlyexpensestracker.R;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentActivity;
 
 import android.view.View;
 import android.widget.DatePicker;
@@ -18,7 +15,6 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.LinkedList;
 
 public class AddExpenseActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     public TextView expenseDateInputTextView;
@@ -34,7 +30,6 @@ public class AddExpenseActivity extends AppCompatActivity implements DatePickerD
 
     public void addNewExpense(View view) {
         Toast.makeText(this, "TEST ADD", Toast.LENGTH_SHORT).show();
-        // TODO: Create a new expense and add it to the LinkedList expenses in MainActivity.
     }
 
     public void openDatePickerDialog(View view) {
@@ -47,7 +42,8 @@ public class AddExpenseActivity extends AppCompatActivity implements DatePickerD
     }
 
     @Override
-    // This method will set the text of expenseDateTextView to the date chosen by the user.
+    // The method onDateSet will be called when the user clicks "OK" on the DatePickerDialog.
+    // This method will set the text of expenseDateInputTextView to the date chosen by the user.
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
         // Use the parameters passed (year, month, & dayOfMonth) to create a new Calendar object.
