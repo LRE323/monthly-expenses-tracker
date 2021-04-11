@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import android.icu.util.Calendar;
 import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Starts AddExpenseActivity
-    public void testFabClick(View view) {
+    public void openAddNewExpenseActivity(View view) {
         //Create a new intent
         Intent intent = new Intent(this, AddExpenseActivity.class);
         // Start the activity.
@@ -59,15 +60,24 @@ public class MainActivity extends AppCompatActivity {
 
     // Create and adds dummy expenses to the LinkedList expenses.
     private void addDummyExpenses() {
+
         // Dummy expenseAmount that will be modified for each Expense.
         double expenseAmount = 5;
-        for (int i = 0; i < 15; i++) {
+
+        // Create a dummy Calendar expenseDate. Used for every expense created.
+        Calendar calendar = Calendar.getInstance();
+
+        for (int i = 0; i < 4; i++) {
+
             // Create a new dummy Expense.
-            Expense newExpense = new Expense("Expense " + i, expenseAmount);
+            Expense newExpense = new Expense("Expense " + i, expenseAmount, calendar);
+
             // Get the name of the newly created Expense.
             String expenseName = newExpense.getExpenseName();
+
             // Add the newly created dummy Expense to the LinkedList expenses.
             expenses.add(newExpense);
+
             // Modify double expenseAmount.
             expenseAmount += 5;
         }

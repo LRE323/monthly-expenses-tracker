@@ -1,6 +1,7 @@
 package com.example.monthlyexpensestracker;
 
 import android.content.Context;
+import android.icu.util.Calendar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,17 +42,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     // The onBindViewHolder() method connects your data to the view holder.
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        // Get the current Expense object .
+
+        // Get the current Expense object.
         Expense currentExpense = expenses.get(position);
-        // Get the expense name and expense amount of currentExpense.
+
+        // Get the expense name, expense amount, and expense date of currentExpense.
         String currentExpenseName = currentExpense.getExpenseName();
         double currentExpenseAmount = currentExpense.getExpenseAmount();
-        // TODO: Get the expense date
+        String currentExpenseDate = currentExpense.getExpenseDateString();
 
         //Set the text for expenseNameTextView, expenseAmountTextView, and expenseDateTextView
         viewHolder.expenseNameTextView.setText(currentExpenseName);
         viewHolder.expenseAmountTextView.setText("$" + String.valueOf(currentExpenseAmount));
-        // TODO: Set the text for expenseDateTextView
+        viewHolder.expenseDateTextView.setText(currentExpenseDate);
     }
 
     @Override

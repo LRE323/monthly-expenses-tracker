@@ -37,13 +37,24 @@
             android:inputType="numberDecimal"
             android:padding="10dp" />
 
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/expenseDateInputTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/dodger_silver"
+            android:hint="Choose a date"
+            android:onClick="openDatePickerDialog"
+            android:padding="10dp" />
+
         <Button
             android:id="@+id/addExpenseButton"
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:layout_margin="10dp"
             android:backgroundTint="@color/android_green"
-            android:onClick="testAdd"
+            android:onClick="addNewExpense"
             android:text="Add new monthly expense" />
     </LinearLayout>
 
