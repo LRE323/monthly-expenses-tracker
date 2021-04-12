@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView headerPaycheck;
     private TextView headerPercent;
 
-
+    // Development branch test
 
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
