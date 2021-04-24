@@ -42,4 +42,10 @@ public class ExpenseRepository {
             expenseDao.insert(expense);
         });
     }
+
+    void deleteAll() {
+        ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
+            expenseDao.deleteAll();
+        });
+    }
 }

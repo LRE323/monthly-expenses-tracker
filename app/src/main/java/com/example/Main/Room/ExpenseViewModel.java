@@ -19,11 +19,15 @@ public class ExpenseViewModel extends AndroidViewModel {
         allExpenses = expenseRepository.getAllExpenses();
     }
 
-    LiveData< List<Expense> > getAllExpenses() {
+    public LiveData< List<Expense> > getAllExpenses() {
         return allExpenses;
     }
 
     public void insert(Expense expense) {
         expenseRepository.insert(expense);
+    }
+
+    public void deleteAll() {
+        expenseRepository.deleteAll();
     }
 }

@@ -2,6 +2,8 @@ package com.example.Main.Room;
 
 
 import android.icu.util.Calendar;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -18,7 +20,7 @@ an entity. You can specify the name of the table if you want it to be different 
 of the class. This names the table "word_table".
  */
 @Entity(tableName = "expense_table")
-public class Expense {
+public class Expense implements Parcelable {
     // Did not auto generate key because I don't want the user to create multiple Expenses with the
     // same expenseName.
 
@@ -42,6 +44,24 @@ public class Expense {
         this.expenseDate = expenseDate;
     }
 
+    protected Expense(Parcel in) {
+        expenseName = in.readString();
+        expenseAmount = in.readDouble();
+        expenseDate = in.readString();
+    }
+
+    public static final Creator<Expense> CREATOR = new Creator<Expense>() {
+        @Override
+        public Expense createFromParcel(Parcel in) {
+            return new Expense(in);
+        }
+
+        @Override
+        public Expense[] newArray(int size) {
+            return new Expense[size];
+        }
+    };
+
     /**
      * Every field that's stored in the database needs to be either public (private in this class)
      * or have a "getter" method.
@@ -59,4 +79,20 @@ public class Expense {
         return this.expenseDate;
     }
 
+    @Override
+    public String toString() {
+        return this.expenseName + ", " + this.expenseAmount + ", " + this.expenseDate;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(expenseName);
+        dest.writeDouble(expenseAmount);
+        dest.writeString(expenseDate);
+    }
 }
