@@ -1,36 +1,37 @@
-package com.example.Main;
+    package com.example.Main;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import android.icu.util.Calendar;
-
 import com.example.Main.Room.Expense;
+import com.example.Main.Room.ExpenseDao;
+import com.example.Main.Room.ExpenseViewModel;
 import com.example.monthlyexpensestracker.R;
 
-import java.text.DateFormat;
-import java.util.LinkedList;
-
-public class MainActivity extends AppCompatActivity {
-    // Stores the Expense objects created by the user.
-    private final LinkedList<Expense> expenses = new LinkedList<>();
+    public class MainActivity extends AppCompatActivity {
     private TextView headerTotal;
     private TextView headerPaycheck;
     private TextView headerPercent;
+    public ExpenseViewModel mExpenseViewModel;
+    private String LOG_TAG = "MainActivity";
+    private static final int ADD_EXPENSE_ACTIVITY_REQUEST_CODE = 100;
 
-    // Development branch test
+    // Define a request code as a member of the MainActivity
+    public static final int NEW_EXPENSE_ACTIVITY_REQUEST_CODE = 1;
 
-    private RecyclerView recyclerView;
-    private RecyclerViewAdapter recyclerViewAdapter;
-
-    @Override
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(LOG_TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -39,20 +40,31 @@ public class MainActivity extends AppCompatActivity {
         headerPaycheck = findViewById(R.id.headerPaycheck);
         headerPercent = findViewById(R.id.headerPercent);
 
-        // Add dummy values to expenses.
-        addDummyExpenses();
-
         // Set the text for the TextView objects in headersHolder.
         setHeadersHolderText();
 
         // Get a handle to the RecyclerView.
-        recyclerView = findViewById(R.id.recyclerView);
-        // Create an adapter and supply the data to be displayed.
-        recyclerViewAdapter = new RecyclerViewAdapter(this, expenses);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        // Create an adapter.
+        final ExpenseListAdapter adapter = new ExpenseListAdapter(new ExpenseListAdapter.ExpenseDiff());
         // Connect the adapter with the RecyclerView.
-        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setAdapter(adapter);
         // Give the RecyclerView a default layout manager.
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Get a ViewModel from the ViewModelProvider
+        mExpenseViewModel = new ViewModelProvider(this).get(ExpenseViewModel.class);
+
+
+        // Add an observer for the LiveData. The onChanged() method fires when the observed data
+        // changes and the activity is in the foreground.
+        mExpenseViewModel.getAllExpenses().observe(this, expenses -> {
+            // Update the cached copy of the words in the adapter.
+            adapter.submitList(expenses);
+        });
+
+        // Delete all Expenses onCreate(). FOR TESTING PURPOSES ONLY.
+        mExpenseViewModel.deleteAll();
     }
 
     //Starts AddExpenseActivity
@@ -60,36 +72,35 @@ public class MainActivity extends AppCompatActivity {
         //Create a new intent
         Intent intent = new Intent(this, AddExpenseActivity.class);
         // Start the activity.
-        startActivity(intent);
+        startActivityForResult(intent, ADD_EXPENSE_ACTIVITY_REQUEST_CODE);
     }
 
-    // Create and adds dummy expenses to the LinkedList expenses.
-    private void addDummyExpenses() {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        Log.i(LOG_TAG, "onActivityResult");
 
-        // Dummy expenseAmount that will be modified for each Expense.
-        double expenseAmount = 5;
+        // If we are returning from AddExpenseActivity
+        if (requestCode == ADD_EXPENSE_ACTIVITY_REQUEST_CODE) {
 
-        // Create a dummy Calendar expenseDate. Used for every expense created.
-        Calendar expenseDateCalendar = Calendar.getInstance();
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
-        String expenseDateString = dateFormat.format( expenseDateCalendar.getTime() );
+            // If the return was successful.
+            if (resultCode == MainActivity.RESULT_OK); {
 
-        for (int i = 0; i < 4; i++) {
+                // If the intent has an extra.
+                if ( intent.hasExtra("newExpense") ) {
 
-            // Create a new dummy Expense.
-            Expense newExpense = new Expense("Expense " + i, expenseAmount, expenseDateString);
+                    // Get the new Expense created by the user.
+                    Expense newExpense = intent.getParcelableExtra("newExpense");
+                    Log.i(LOG_TAG, "Intent has Expense extra");
+                    Log.i(LOG_TAG, "New expense created: " + newExpense.toString());
 
-            // Get the name of the newly created Expense.
-            String expenseName = newExpense.getExpenseName();
-
-            // Add the newly created dummy Expense to the LinkedList expenses.
-            expenses.add(newExpense);
-
-            // Modify double expenseAmount.
-            expenseAmount += 5;
+                    // Add newExpense to the database.
+                    mExpenseViewModel.insert(newExpense);
+                }
+            }
         }
-    }
 
+    }
     // Sets the text for all TextViews in the LinearLayout headersHolder.
     private void setHeadersHolderText() {
         setHeaderTotalText();
@@ -100,11 +111,6 @@ public class MainActivity extends AppCompatActivity {
     private void setHeaderTotalText() {
         // Get the sum of all the monthly expenses.
         double sumOfExpenses = 0;
-        for (Expense expense: expenses) {
-            // Get the current expense amount and add to sumOfExpenses.
-            double currentExpense = expense.getExpenseAmount();
-            sumOfExpenses += currentExpense;
-        }
         // Set the text for TextView headerTotal.
         String text = "Monthly expenses: $" + sumOfExpenses;
         headerTotal.setText(text);
@@ -118,6 +124,18 @@ public class MainActivity extends AppCompatActivity {
     private void setHeaderPercentText() {
         // TODO: Set the text in headerPercent with paycheck amount info.
         headerPercent.setText("Your monthly expenses make up ##% of your monthly income.");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(LOG_TAG, "onStart");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(LOG_TAG, "onPause");
     }
 
 }
