@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.Main.Room.Expense;
+import com.example.Main.ExpenseRoom.Expense;
 import com.example.monthlyexpensestracker.R;
 
 public class ExpenseViewHolder extends RecyclerView.ViewHolder {
@@ -25,7 +25,7 @@ public class ExpenseViewHolder extends RecyclerView.ViewHolder {
     public void bind (Expense currentExpense) {
 
         expenseNameTextView.setText( currentExpense.getExpenseName() );
-        expenseAmountTextView.setText( "$" + currentExpense.getExpenseAmount() );
+        expenseAmountTextView.setText( "$" +  String.format("%.2f", currentExpense.getExpenseAmount())  );
         expenseDateTextView.setText( currentExpense.getExpenseDate() );
 
     }

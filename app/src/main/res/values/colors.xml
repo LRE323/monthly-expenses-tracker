@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="old_glory_red">#B71234</color>
+
     <color name="dodger_silver">#A5ACAF</color>
     <color name="android_green">#3DDC84</color>
     <color name="purple_200">#FFBB86FC</color>

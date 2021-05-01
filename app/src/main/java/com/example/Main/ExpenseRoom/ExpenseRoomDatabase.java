@@ -1,4 +1,4 @@
-package com.example.Main.Room;
+package com.example.Main.ExpenseRoom;
 
 import android.content.Context;
 
@@ -63,20 +63,6 @@ public abstract class ExpenseRoomDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-
-            // If you want to keep data through app restarts,
-            // comment out the following block
-            databaseWriteExecutor.execute(() -> {
-                // Populate the database in the background.
-                // If you want to start with more words, just add them.
-                ExpenseDao dao = INSTANCE.expenseDao();
-
-                /*Expense expense1 = new Expense("Spotify", 9.99, "April 1, 2021");
-                Expense expense2 = new Expense("Hulu", 11.99, "April 12, 2021");
-
-                dao.insert(expense1);
-                dao.insert(expense2);*/
-            });
         }
     };
 }

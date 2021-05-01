@@ -6,19 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.example.Main.MainActivity">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/testFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        android:clickable="true"
-        android:onClick="openAddNewExpenseActivity"
-        app:backgroundTint="@color/android_green"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
     <LinearLayout
         android:id="@+id/headersHolder"
         android:layout_width="match_parent"
@@ -30,14 +17,17 @@
 
         <TextView
             android:id="@+id/headerTotal"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:padding="5dp"
             android:text=""
             android:textSize="@dimen/headerFontSize"
             android:textStyle="bold" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/headerPaycheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,13 +37,16 @@
             android:textStyle="bold" />
 
         <TextView
+            android:visibility="gone"
+            android:gravity="center"
             android:id="@+id/headerPercent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:clickable="true"
             android:padding="5dp"
-            android:text=""
+            android:text="@string/header_percent_no_monthly_income"
             android:textSize="@dimen/headerFontSize"
-            android:textStyle="bold" />
+            android:textStyle="italic" />
 
         <View
             android:layout_width="match_parent"
@@ -67,15 +60,30 @@
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="50dp"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@id/testFab"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headersHolder">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/testFab"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:clickable="true"
+        android:onClick="openAddNewExpenseActivity"
+        app:backgroundTint="@color/android_green"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

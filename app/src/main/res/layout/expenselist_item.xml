@@ -14,9 +14,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:paddingTop="40dp"
+            android:paddingTop="20dp"
             android:text=""
-            android:textSize="25sp" />
+            android:textSize="30sp"
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -26,17 +27,19 @@
             android:orientation="vertical">
 
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/expenseAmountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="AMOUNT GOES HERE" />
+                android:layout_gravity="end"
+                android:padding="3dp"/>
 
             <TextView
+                android:textStyle="italic"
+                android:padding="3dp"
                 android:id="@+id/expenseDateTextView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="DATE GOES HERE" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

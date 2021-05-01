@@ -1,7 +1,6 @@
-package com.example.Main.Room;
+package com.example.Main.ExpenseRoom;
 
 
-import android.icu.util.Calendar;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,9 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 /*
 Entity: Annotated class that describes a database table when working with Room.
@@ -81,7 +77,7 @@ public class Expense implements Parcelable {
 
     @Override
     public String toString() {
-        return this.expenseName + ", " + this.expenseAmount + ", " + this.expenseDate;
+        return this.expenseName/* + ", " + this.expenseAmount + ", " + this.expenseDate*/;
     }
 
     @Override

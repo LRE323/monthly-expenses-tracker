@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import com.example.Main.Room.Expense;
+import com.example.Main.ExpenseRoom.Expense;
 
 public class ExpenseListAdapter extends ListAdapter<Expense, ExpenseViewHolder> {
 

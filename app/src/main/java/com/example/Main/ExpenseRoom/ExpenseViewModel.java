@@ -1,4 +1,4 @@
-package com.example.Main.Room;
+package com.example.Main.ExpenseRoom;
 
 import android.app.Application;
 
@@ -16,10 +16,11 @@ public class ExpenseViewModel extends AndroidViewModel {
     public ExpenseViewModel(Application application) {
         super(application);
         expenseRepository = new ExpenseRepository(application);
-        allExpenses = expenseRepository.getAllExpenses();
+        allExpenses = expenseRepository.getExpensesAsLiveData();
+       // listOfExpenses = expenseRepository.getExpensesAsList();
     }
 
-    public LiveData< List<Expense> > getAllExpenses() {
+    public LiveData< List<Expense> > getExpensesAsLiveData() {
         return allExpenses;
     }
 

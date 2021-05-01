@@ -4,7 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.Main.Room.Expense;
+import com.example.Main.ExpenseRoom.Expense;
 import com.example.monthlyexpensestracker.R;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,13 +21,10 @@ import java.util.Calendar;
 public class AddExpenseActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private TextView expenseNameInputEditText;
-    private String expenseNameInputAsString;
 
     private TextView expenseAmountInputEditText;
-    private double expenseAmountInputAsDouble;
 
     private TextView expenseDateInputTextView;
-    private String expenseDateInputAsString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +45,10 @@ public class AddExpenseActivity extends AppCompatActivity implements DatePickerD
         } else {
 
             // Create the new Expense.
+            String expenseNameInputAsString = expenseNameInputEditText.getText().toString();
+            double expenseAmountInputAsDouble = Double.parseDouble(expenseAmountInputEditText.getText().toString());
+            String expenseDateInputAsString = expenseDateInputTextView.getText().toString();
+
             Expense newExpense = new Expense(expenseNameInputAsString, expenseAmountInputAsDouble, expenseDateInputAsString);
 
             // Create a new Intent as a container for the new Expense.
@@ -96,25 +97,23 @@ public class AddExpenseActivity extends AppCompatActivity implements DatePickerD
     private boolean expenseInputIsValid() {
 
         // Check if expenseNameInputEditText is valid.
-        expenseNameInputAsString = expenseNameInputEditText.getText().toString();
+        String expenseNameInputAsString = expenseNameInputEditText.getText().toString();
         if ( expenseNameInputAsString.isEmpty() ) {
-            Toast.makeText(this, "Please enter an expense name.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter an expense name", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Check if expenseAmountInputEditText is valid.
         String expenseAmountInputAsString = expenseAmountInputEditText.getText().toString();
         if ( expenseAmountInputAsString.isEmpty() ) {
-            Toast.makeText(this, "Please enter an expense amount.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter an expense amount", Toast.LENGTH_SHORT).show();
             return false;
-        } else {
-            expenseAmountInputAsDouble = Double.parseDouble(expenseAmountInputAsString);
         }
 
         // Check if expenseDateInputTextView is valid.
-        expenseDateInputAsString = expenseDateInputTextView.getText().toString();
+        String expenseDateInputAsString = expenseDateInputTextView.getText().toString();
         if ( expenseDateInputAsString.isEmpty() ) {
-            Toast.makeText(this, "Please select an expense date.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please select an expense date", Toast.LENGTH_SHORT).show();
             return false;
         }
 

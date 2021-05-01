@@ -1,4 +1,4 @@
-package com.example.Main.Room;
+package com.example.Main.ExpenseRoom;
 
 import android.app.Application;
 
@@ -22,11 +22,11 @@ public class ExpenseRepository {
         expenseDao = db.expenseDao();
 
         // Create a List<Expense> sorted by ascending expenseName.
-        allExpenses = expenseDao.getAlphabetizedExpenses();
+        allExpenses = expenseDao.getExpensesAsLiveData();
     }
 
     // Returns the LiveData list of Expenses from Room.
-    LiveData< List<Expense> > getAllExpenses() {
+    LiveData< List<Expense> > getExpensesAsLiveData() {
         return allExpenses;
     }
 
