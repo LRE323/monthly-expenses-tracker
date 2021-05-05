@@ -40,16 +40,16 @@ public class AddExpenseActivity extends AppCompatActivity implements DatePickerD
     public void addExpense(View view) {
 
         // Ensure the information provided by the user is valid.
-        if ( !expenseInputIsValid() ) {
+        if ( !isExpenseInputValid() ) {
             return;
         } else {
 
             // Create the new Expense.
-            String expenseNameInputAsString = expenseNameInputEditText.getText().toString();
-            double expenseAmountInputAsDouble = Double.parseDouble(expenseAmountInputEditText.getText().toString());
-            String expenseDateInputAsString = expenseDateInputTextView.getText().toString();
+            String expenseNameInputString = expenseNameInputEditText.getText().toString();
+            double expenseAmountInputDouble = Double.parseDouble(expenseAmountInputEditText.getText().toString());
+            String expenseDateInputString = expenseDateInputTextView.getText().toString();
 
-            Expense newExpense = new Expense(expenseNameInputAsString, expenseAmountInputAsDouble, expenseDateInputAsString);
+            Expense newExpense = new Expense(expenseNameInputString, expenseAmountInputDouble, expenseDateInputString);
 
             // Create a new Intent as a container for the new Expense.
             Intent intent = new Intent(this, MainActivity.class);
@@ -94,7 +94,7 @@ public class AddExpenseActivity extends AppCompatActivity implements DatePickerD
         expenseDateInputTextView.setText(dateSelected);
     }
 
-    private boolean expenseInputIsValid() {
+    private boolean isExpenseInputValid() {
 
         // Check if expenseNameInputEditText is valid.
         String expenseNameInputAsString = expenseNameInputEditText.getText().toString();

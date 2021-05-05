@@ -40,24 +40,6 @@ public class Expense implements Parcelable {
         this.expenseDate = expenseDate;
     }
 
-    protected Expense(Parcel in) {
-        expenseName = in.readString();
-        expenseAmount = in.readDouble();
-        expenseDate = in.readString();
-    }
-
-    public static final Creator<Expense> CREATOR = new Creator<Expense>() {
-        @Override
-        public Expense createFromParcel(Parcel in) {
-            return new Expense(in);
-        }
-
-        @Override
-        public Expense[] newArray(int size) {
-            return new Expense[size];
-        }
-    };
-
     /**
      * Every field that's stored in the database needs to be either public (private in this class)
      * or have a "getter" method.
@@ -75,9 +57,28 @@ public class Expense implements Parcelable {
         return this.expenseDate;
     }
 
+    public void setExpenseName(String expenseName) {
+        this.expenseName = expenseName;
+    }
+
+    public void setExpenseAmount(double expenseAmount) {
+        this.expenseAmount = expenseAmount;
+    }
+
+    public void setExpenseDate(String expenseDate) {
+        this.expenseDate = expenseDate;
+    }
+
     @Override
     public String toString() {
-        return this.expenseName/* + ", " + this.expenseAmount + ", " + this.expenseDate*/;
+        return this.expenseName + ", " + this.expenseAmount + ", " + this.expenseDate;
+    }
+
+    // Parcelable methods
+    protected Expense(Parcel in) {
+        expenseName = in.readString();
+        expenseAmount = in.readDouble();
+        expenseDate = in.readString();
     }
 
     @Override
@@ -91,4 +92,16 @@ public class Expense implements Parcelable {
         dest.writeDouble(expenseAmount);
         dest.writeString(expenseDate);
     }
+
+    public static final Creator<Expense> CREATOR = new Creator<Expense>() {
+        @Override
+        public Expense createFromParcel(Parcel in) {
+            return new Expense(in);
+        }
+
+        @Override
+        public Expense[] newArray(int size) {
+            return new Expense[size];
+        }
+    };
 }

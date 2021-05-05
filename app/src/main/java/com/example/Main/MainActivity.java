@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.Main.ExpenseRoom.Expense;
 import com.example.Main.ExpenseRoom.ExpenseViewModel;
@@ -18,34 +17,34 @@ import com.example.monthlyexpensestracker.R;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.text.ParsePosition;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
     public class MainActivity extends AppCompatActivity {
-        // XML objects
-        private TextView headerTotal;
-        private RecyclerView recyclerView;
-        private ExpenseListAdapter adapter;
 
+        // UI Components.
+        private TextView tvHeaderTotal;
+        private RecyclerView rvExpenseList;
+        private ExpenseListAdapter expenseListAdapter;
         // These two will be added in a later version.
-        //private TextView headerPaycheck;
-        //private TextView headerPercent;
+        //private TextView tvHeaderPaycheck;
+        //private TextView tvHeaderPercent;
 
+        // Room database variables.
         public ExpenseViewModel mExpenseViewModel;
-        private String LOG_TAG = "MainActivity";
-        private String SORT_TAG = "Sort";
         private static final int ADD_EXPENSE_ACTIVITY_REQUEST_CODE = 100;
 
-        // Define a request code as a member of the MainActivity
-        public static final int NEW_EXPENSE_ACTIVITY_REQUEST_CODE = 1;
+        // Misc. instance variables.
+        private double sumOfExpenseList;
+
+        // Logcat Tags
+        private String TAG = "MainActivity";
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
-            Log.i(LOG_TAG, "onCreate");
+            Log.i(TAG, "onCreate");
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
 
@@ -63,20 +62,89 @@ import java.util.List;
             observeData();
         }
 
+        private void updateExpenses() {
+        }
+
+        private boolean expensesAreUpToDate() {
+            // Get the today's date.
+            final Calendar today = Calendar.getInstance();
+            Log.i(TAG, String.valueOf(today.get(Calendar.MONTH) + 1));
+            Log.i(TAG, String.valueOf(today.get(Calendar.DATE)));
+            Log.i(TAG, String.valueOf(today.get(Calendar.YEAR)));
+
+            mExpenseViewModel.getExpensesAsLiveData().observe(this, expenses -> {
+                for (Expense e: expenses) {
+                }
+            });
+            return true;
+        }
+
+        // TODO: After initial release: Change this method, it is deprecated.
+        //Starts AddExpenseActivity
+        public void openAddNewExpenseActivity(View view) {
+            //Create a new intent
+            Intent intent = new Intent(this, AddExpenseActivity.class);
+
+            /*
+            Per Android documentation: While the underlying startActivityForResult() and
+            onActivityResult() APIs are available on the Activity class on all API levels,
+            it is strongly recommended to use the Activity Result APIs introduced in
+            AndroidX Activity and Fragment.
+            */
+            // Start the activity.
+            startActivityForResult(intent, ADD_EXPENSE_ACTIVITY_REQUEST_CODE);
+        }
+
+        // TODO: After initial release: Change this method, it is deprecated.
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+            super.onActivityResult(requestCode, resultCode, intent);
+            Log.i(TAG, "onActivityResult");
+
+            // If the return was successful.
+
+            if (resultCode == MainActivity.RESULT_OK) {
+
+                // If we are returning from AddExpenseActivity
+                if (requestCode == ADD_EXPENSE_ACTIVITY_REQUEST_CODE) {
+
+                    // If the intent has an extra.
+                    if ( intent.hasExtra("newExpense") ) {
+
+                        // Get the new Expense created by the user.
+                        Expense newExpense = intent.getParcelableExtra("newExpense");
+                        Log.i(TAG, "Intent has Expense extra");
+                        Log.i(TAG, "New expense created: " + newExpense.toString());
+
+                        // Add newExpense to the database.
+                        mExpenseViewModel.insert(newExpense);
+                    }
+                }
+            } else  {
+                // Do nothing.
+            }
+        }
+
         private void observeData() {
             // Add an observer for the LiveData. The onChanged() method fires when the observed data
             // changes and the activity is in the foreground.
-            mExpenseViewModel.getExpensesAsLiveData().observe(this, expenses -> {
+            mExpenseViewModel.getExpensesAsLiveData().observe(this, expenseList -> {
+
+                // Calculate the sum of the expense list.
+                sumOfExpenseList = getSumOfExpenseList(expenseList);
 
                 // Sort expenses.
-                sortExpensesByDate(expenses);
+                sortExpensesByDate(expenseList);
+
+                // Set the text for the TextView objects in headersHolder.
+                setHeadersHolderText();
 
                 // Update the cached copy of the words in the adapter.
-                adapter.submitList(expenses);
+                expenseListAdapter.submitList(expenseList);
+
             });
 
-            // Set the text for the TextView objects in headersHolder.
-            setHeadersHolderText();
+
         }
 
         private void connectToRoomDatabase() {
@@ -97,50 +165,16 @@ import java.util.List;
             */
         }
 
-        //Starts AddExpenseActivity
-        public void openAddNewExpenseActivity(View view) {
-            //Create a new intent
-            Intent intent = new Intent(this, AddExpenseActivity.class);
-            // Start the activity.
-            startActivityForResult(intent, ADD_EXPENSE_ACTIVITY_REQUEST_CODE);
-        }
-
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-            super.onActivityResult(requestCode, resultCode, intent);
-            Log.i(LOG_TAG, "onActivityResult");
-
-            // If we are returning from AddExpenseActivity
-            if (requestCode == ADD_EXPENSE_ACTIVITY_REQUEST_CODE) {
-
-                // If the return was successful.
-                if (resultCode == MainActivity.RESULT_OK); {
-
-                    // If the intent has an extra.
-                    if ( intent.hasExtra("newExpense") ) {
-
-                        // Get the new Expense created by the user.
-                        Expense newExpense = intent.getParcelableExtra("newExpense");
-                        Log.i(LOG_TAG, "Intent has Expense extra");
-                        Log.i(LOG_TAG, "New expense created: " + newExpense.toString());
-
-                        // Add newExpense to the database.
-                        mExpenseViewModel.insert(newExpense);
-                    }
-                }
-            }
-        }
         // Sets the text for all TextViews in the LinearLayout headersHolder.
         private void setHeadersHolderText() {
-            setHeaderTotalText();
+            setHeaderTotalText(sumOfExpenseList);
             //setHeaderPaycheckText();
             //setHeaderPercentText();
         }
 
-        // TODO: Round off sumOfExpenses to 0.01
-        private void setHeaderTotalText() {
+        private void setHeaderTotalText(double sum) {
             // Get a List<Expense> from the Room database.
-            mExpenseViewModel.getExpensesAsLiveData().observe(this, expenses -> {
+            /*mExpenseViewModel.getExpensesAsLiveData().observe(this, expenses -> {
                 double sumOfExpenses = 0;
                 for (Expense e: expenses) {
                     double currentExpenseAmount = e.getExpenseAmount();
@@ -148,8 +182,20 @@ import java.util.List;
                 }
                 // Format sumOfExpenses to 0.01
                 String sumOfExpensesFormatted = String.format("%.2f", sumOfExpenses);
-                headerTotal.setText("Sum of monthly expenses: $" + sumOfExpensesFormatted);
-            });
+                tvHeaderTotal.setText("Sum of monthly expenses: $" + sumOfExpensesFormatted);
+            });*/
+            /*
+            double sumOfExpenses = 0;
+            for (Expense expense: expenseList) {
+                double currentExpenseAmount = expense.getExpenseAmount();
+                sumOfExpenses += currentExpenseAmount;
+            }
+            // Format sumOfExpenses to 0.01
+            String sumOfExpensesFormatted = String.format("%.2f", sumOfExpenses);
+            tvHeaderTotal.setText("Sum of monthly expenses: $" + sumOfExpensesFormatted);*/
+            String sumOfExpensesFormatted = String.format("%.2f", sum);
+            tvHeaderTotal.setText("Sum of monthly expenses: $" + sumOfExpensesFormatted);
+
         }
 
         /*
@@ -167,45 +213,46 @@ import java.util.List;
         @Override
         protected void onStart() {
             super.onStart();
-            Log.i(LOG_TAG, "onStart");
+            Log.i(TAG, "onStart");
         }
 
         @Override
         protected void onPause() {
             super.onPause();
-            Log.i(LOG_TAG, "onPause");
+            Log.i(TAG, "onPause");
         }
 
-
-        private void sortExpensesByDate(List<Expense> expenses) {
+        private void sortExpensesByDate(List<Expense> listOfExpenseObjects) {
 
             // Create a new DateFormat object, to parse expenseDate for every Expense.
             DateFormat dateFormat = DateFormat.getDateInstance();
 
-            for (int i = 1; i < expenses.size(); i++) {
+            ParsePosition pp = new ParsePosition(0);
+
+            for (int i = 1; i < listOfExpenseObjects.size(); i++) {
                 int k = i;
 
                 try {
 
                     while (k > 0) {
                         // Get Expenses.
-                        Expense currentExpense = expenses.get(k);
-                        Expense previousExpense = expenses.get(k - 1);
+                        Expense currentExpenseObject = listOfExpenseObjects.get(k);
+                        Expense previousExpenseObject = listOfExpenseObjects.get(k - 1);
 
                         // Get expenseDates.
-                        String currentExpenseDate = currentExpense.getExpenseDate();
-                        String previousExpenseDate = previousExpense.getExpenseDate();
+                        String currentExpenseDateString = currentExpenseObject.getExpenseDate();
+                        String previousExpenseDateString = previousExpenseObject.getExpenseDate();
 
                         // Parse to Date objects.
-                        Date currentDate = dateFormat.parse(currentExpenseDate);
-                        Date previousDate = dateFormat.parse(previousExpenseDate);
+                        Date currentDateObject = dateFormat.parse(currentExpenseDateString);
+                        Date previousDateObject = dateFormat.parse(previousExpenseDateString);
 
 
-                        if ( currentDate.before(previousDate) ) {
+                        if ( currentDateObject.before(previousDateObject) ) {
 
                             // Swap.
-                            expenses.set(k - 1, currentExpense );
-                            expenses.set(k, previousExpense);
+                            listOfExpenseObjects.set(k - 1, currentExpenseObject );
+                            listOfExpenseObjects.set(k, previousExpenseObject);
 
                             // Go down the list.
                             k--;
@@ -226,7 +273,7 @@ import java.util.List;
         }
 
         private void create_all_XML_objects() {
-            headerTotal = findViewById(R.id.headerTotal);
+            tvHeaderTotal = findViewById(R.id.headerTotal);
             //headerPaycheck = findViewById(R.id.headerPaycheck);
             //headerPercent = findViewById(R.id.headerPercent);
 
@@ -236,15 +283,24 @@ import java.util.List;
         }
 
         private void createRecyclerViewAndRelated() {
-            recyclerView = findViewById(R.id.recyclerView);
+            rvExpenseList = findViewById(R.id.recyclerView);
 
             // Create an adapter.
-            adapter = new ExpenseListAdapter(new ExpenseListAdapter.ExpenseDiff());
+            expenseListAdapter = new ExpenseListAdapter(new ExpenseListAdapter.ExpenseDiff());
 
             // Connect the adapter with the RecyclerView.
-            recyclerView.setAdapter(adapter);
+            rvExpenseList.setAdapter(expenseListAdapter);
 
             // Give the RecyclerView a default layout manager.
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            rvExpenseList.setLayoutManager(new LinearLayoutManager(this));
+        }
+
+        private double getSumOfExpenseList(List<Expense> expenseList) {
+            double sum = 0;
+            for (Expense expense: expenseList) {
+                double currentExpenseAmount = expense.getExpenseAmount();
+                sum += currentExpenseAmount;
+            }
+            return sum;
         }
     }
