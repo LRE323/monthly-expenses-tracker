@@ -1,4 +1,4 @@
-package com.example.Main.ExpenseRoom;
+package RoomDatabase;
 
 import android.app.Application;
 
@@ -17,7 +17,6 @@ public class ExpenseViewModel extends AndroidViewModel {
         super(application);
         expenseRepository = new ExpenseRepository(application);
         allExpenses = expenseRepository.getExpensesAsLiveData();
-       // listOfExpenses = expenseRepository.getExpensesAsList();
     }
 
     public LiveData< List<Expense> > getExpensesAsLiveData() {
@@ -30,5 +29,11 @@ public class ExpenseViewModel extends AndroidViewModel {
 
     public void deleteAll() {
         expenseRepository.deleteAll();
+    }
+
+    public void deleteAtExpense(Expense expense) {
+
+
+        expenseRepository.deleteAnExpense( expense.getExpenseName() );
     }
 }

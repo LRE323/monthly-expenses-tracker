@@ -12,9 +12,6 @@ import androidx.fragment.app.DialogFragment;
 import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment {
-    private TextView textView;
-    private View view;
-    private LayoutInflater inflater;
 
     @Override
     public Dialog onCreateDialog(Bundle saveInstanceState) {

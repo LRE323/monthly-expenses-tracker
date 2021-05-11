@@ -4,7 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.Main.ExpenseRoom.Expense;
+import RoomDatabase.Expense;
 import com.example.monthlyexpensestracker.R;
 
 import androidx.appcompat.app.AppCompatActivity;

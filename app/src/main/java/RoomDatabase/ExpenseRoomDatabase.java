@@ -1,4 +1,4 @@
-package com.example.Main.ExpenseRoom;
+package RoomDatabase;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package com.example.Main.ExpenseRoom;
+package RoomDatabase;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -29,6 +29,9 @@ public interface ExpenseDao {
     @Query("DELETE FROM expense_table")
     // Declares a method to delete all the Expenses.
     void deleteAll();
+
+    @Query("DELETE FROM expense_table WHERE expense_name = :expenseName")
+    void deleteAnExpense(String expenseName);
 
     // Returns a LiveData list of expenses.
     @Query("SELECT * FROM expense_table ORDER BY expense_name ASC")

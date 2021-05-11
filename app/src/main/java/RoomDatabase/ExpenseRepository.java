@@ -1,4 +1,4 @@
-package com.example.Main.ExpenseRoom;
+package RoomDatabase;
 
 import android.app.Application;
 
@@ -46,6 +46,12 @@ public class ExpenseRepository {
     void deleteAll() {
         ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
             expenseDao.deleteAll();
+        });
+    }
+
+    void deleteAnExpense(String expenseName) {
+        ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
+            expenseDao.deleteAnExpense(expenseName);
         });
     }
 }

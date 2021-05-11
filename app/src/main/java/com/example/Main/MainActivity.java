@@ -5,14 +5,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.Main.ExpenseRoom.Expense;
-import com.example.Main.ExpenseRoom.ExpenseViewModel;
+import RoomDatabase.Expense;
+import RoomDatabase.ExpenseViewModel;
+
 import com.example.monthlyexpensestracker.R;
 
 import java.text.DateFormat;
@@ -22,22 +26,23 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-    public class MainActivity extends AppCompatActivity {
+    public class MainActivity extends AppCompatActivity implements ExpenseViewHolder.OnExpenseListener {
 
         // UI Components.
-        private TextView tvHeaderTotal;
+        private TextView tvSumOfExpenses;
         private RecyclerView rvExpenseList;
         private ExpenseListAdapter expenseListAdapter;
         // These two will be added in a later version.
-        //private TextView tvHeaderPaycheck;
-        //private TextView tvHeaderPercent;
+        //private TextView tvUpcomingPayments;
+        //private TextView tvPercentOfIncome;
 
         // Room database variables.
         public ExpenseViewModel mExpenseViewModel;
-        private static final int ADD_EXPENSE_ACTIVITY_REQUEST_CODE = 100;
+        public final int ADD_EXPENSE_ACTIVITY_REQUEST_CODE = 100;
+        private List<Expense> mExpenseList;
 
         // Misc. instance variables.
-        private double sumOfExpenseList;
+        private double mSumOfExpenseList;
 
         // Logcat Tags
         private String TAG = "MainActivity";
@@ -57,9 +62,9 @@ import java.util.List;
             // Delete all previously made expenses. For development purposes.
             //mExpenseViewModel.deleteAll();
 
-            createDummyExpense();
+            createDummyExpenses();
 
-            observeData();
+            observeExpenses();
         }
 
         private void updateExpenses() {
@@ -125,19 +130,23 @@ import java.util.List;
             }
         }
 
-        private void observeData() {
+        private void observeExpenses() {
+
             // Add an observer for the LiveData. The onChanged() method fires when the observed data
             // changes and the activity is in the foreground.
             mExpenseViewModel.getExpensesAsLiveData().observe(this, expenseList -> {
 
                 // Calculate the sum of the expense list.
-                sumOfExpenseList = getSumOfExpenseList(expenseList);
+                mSumOfExpenseList = getSumOfExpenseList(expenseList);
 
-                // Sort expenses.
+                // Sort expense list.
                 sortExpensesByDate(expenseList);
 
                 // Set the text for the TextView objects in headersHolder.
                 setHeadersHolderText();
+
+                // Save a copy of the current expense list.
+                mExpenseList = expenseList;
 
                 // Update the cached copy of the words in the adapter.
                 expenseListAdapter.submitList(expenseList);
@@ -154,7 +163,7 @@ import java.util.List;
 
         private void createAllOnClickListeners() {
             /*
-            headerPercent.setOnLongClickListener(new View.OnLongClickListener() {
+            tvPercentOfIncome.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
                         Toast.makeText(MainActivity.this, "Test long click", Toast.LENGTH_SHORT)
@@ -163,50 +172,32 @@ import java.util.List;
                     }
                 });
             */
+            // onClickListener for RecyclerView item
+
         }
 
         // Sets the text for all TextViews in the LinearLayout headersHolder.
         private void setHeadersHolderText() {
-            setHeaderTotalText(sumOfExpenseList);
+            setTextForTextViewSumOfExpenses(mSumOfExpenseList);
             //setHeaderPaycheckText();
             //setHeaderPercentText();
         }
 
-        private void setHeaderTotalText(double sum) {
-            // Get a List<Expense> from the Room database.
-            /*mExpenseViewModel.getExpensesAsLiveData().observe(this, expenses -> {
-                double sumOfExpenses = 0;
-                for (Expense e: expenses) {
-                    double currentExpenseAmount = e.getExpenseAmount();
-                    sumOfExpenses += currentExpenseAmount;
-                }
-                // Format sumOfExpenses to 0.01
-                String sumOfExpensesFormatted = String.format("%.2f", sumOfExpenses);
-                tvHeaderTotal.setText("Sum of monthly expenses: $" + sumOfExpensesFormatted);
-            });*/
-            /*
-            double sumOfExpenses = 0;
-            for (Expense expense: expenseList) {
-                double currentExpenseAmount = expense.getExpenseAmount();
-                sumOfExpenses += currentExpenseAmount;
-            }
-            // Format sumOfExpenses to 0.01
-            String sumOfExpensesFormatted = String.format("%.2f", sumOfExpenses);
-            tvHeaderTotal.setText("Sum of monthly expenses: $" + sumOfExpensesFormatted);*/
+        private void setTextForTextViewSumOfExpenses(double sum) {
             String sumOfExpensesFormatted = String.format("%.2f", sum);
-            tvHeaderTotal.setText("Sum of monthly expenses: $" + sumOfExpensesFormatted);
+            tvSumOfExpenses.setText("Sum of monthly expenses: $" + sumOfExpensesFormatted);
 
         }
 
         /*
         private void setHeaderPaycheckText() {
-            // TODO: Set the text in headerPaycheck with paycheck date info.
-            headerPaycheck.setText("You will pay $###.## between now and your next paycheck.");
+            // TODO: Set the text in tvUpcomingPayments with paycheck date info.
+            tvUpcomingPayments.setText("You will pay $###.## between now and your next paycheck.");
         }
 
         private void setHeaderPercentText() {
-            // TODO: Set the text in headerPercent with paycheck amount info.
-            //headerPercent.setText("Your monthly expenses make up ##% of your monthly income.");
+            // TODO: Set the text in tvPercentOfIncome with paycheck amount info.
+            //tvPercentOfIncome.setText("Your monthly expenses make up ##% of your monthly income.");
         }
          */
 
@@ -222,22 +213,22 @@ import java.util.List;
             Log.i(TAG, "onPause");
         }
 
-        private void sortExpensesByDate(List<Expense> listOfExpenseObjects) {
+        private void sortExpensesByDate(List<Expense> expenseList) {
 
             // Create a new DateFormat object, to parse expenseDate for every Expense.
             DateFormat dateFormat = DateFormat.getDateInstance();
 
             ParsePosition pp = new ParsePosition(0);
 
-            for (int i = 1; i < listOfExpenseObjects.size(); i++) {
+            for (int i = 1; i < expenseList.size(); i++) {
                 int k = i;
 
                 try {
 
                     while (k > 0) {
                         // Get Expenses.
-                        Expense currentExpenseObject = listOfExpenseObjects.get(k);
-                        Expense previousExpenseObject = listOfExpenseObjects.get(k - 1);
+                        Expense currentExpenseObject = expenseList.get(k);
+                        Expense previousExpenseObject = expenseList.get(k - 1);
 
                         // Get expenseDates.
                         String currentExpenseDateString = currentExpenseObject.getExpenseDate();
@@ -251,8 +242,8 @@ import java.util.List;
                         if ( currentDateObject.before(previousDateObject) ) {
 
                             // Swap.
-                            listOfExpenseObjects.set(k - 1, currentExpenseObject );
-                            listOfExpenseObjects.set(k, previousExpenseObject);
+                            expenseList.set(k - 1, currentExpenseObject );
+                            expenseList.set(k, previousExpenseObject);
 
                             // Go down the list.
                             k--;
@@ -265,7 +256,7 @@ import java.util.List;
             }
         }
 
-        private void createDummyExpense() {
+        private void createDummyExpenses() {
             mExpenseViewModel.insert(new Expense("Expense 1", 0.99, "January 1, 1999"));
             mExpenseViewModel.insert(new Expense("Expense 2", 1.99, "January 1, 2020"));
             mExpenseViewModel.insert(new Expense("Expense 3", 2.99, "July 4, 1776"));
@@ -273,9 +264,9 @@ import java.util.List;
         }
 
         private void create_all_XML_objects() {
-            tvHeaderTotal = findViewById(R.id.headerTotal);
-            //headerPaycheck = findViewById(R.id.headerPaycheck);
-            //headerPercent = findViewById(R.id.headerPercent);
+            tvSumOfExpenses = findViewById(R.id.tvSumOfExpenses);
+            //tvUpcomingPayments = findViewById(R.id.tvUpcomingPayments);
+            //tvPercentOfIncome = findViewById(R.id.tvPercentOfIncome);
 
             // Get a handle to the RecyclerView.
             createRecyclerViewAndRelated();
@@ -286,7 +277,7 @@ import java.util.List;
             rvExpenseList = findViewById(R.id.recyclerView);
 
             // Create an adapter.
-            expenseListAdapter = new ExpenseListAdapter(new ExpenseListAdapter.ExpenseDiff());
+            expenseListAdapter = new ExpenseListAdapter(new ExpenseListAdapter.ExpenseDiff(), this);
 
             // Connect the adapter with the RecyclerView.
             rvExpenseList.setAdapter(expenseListAdapter);
@@ -302,5 +293,39 @@ import java.util.List;
                 sum += currentExpenseAmount;
             }
             return sum;
+        }
+
+        @Override
+        public void onExpenseClick(int position) {
+
+            // Create a new AlertDialog.Builder
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+            // Create the OnClickListener.
+            DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Delete the row at position in expense_table
+                    mExpenseViewModel.deleteAtExpense( mExpenseList.get(position) );
+                    /*
+                    String toastMessage = "Delete " + "";
+                    Toast.makeText(MainActivity.this, "Delete Expense", Toast.LENGTH_SHORT).show(); */
+                }
+            };
+
+            // Set the message for the AlertDialog.
+            builder.setMessage("Are you sure you want to delete this expense?");
+
+            // Setup the positive button.
+            builder.setPositiveButton("Yes", onClickListener);
+
+            // Setup the negative button, which will do nothing.
+            builder.setNegativeButton("Cancel", null);
+
+            // Create the AlertDialog.
+            AlertDialog alertDialog = builder.create();
+
+            // Show the AlertDialog.
+            alertDialog.show();
         }
     }
