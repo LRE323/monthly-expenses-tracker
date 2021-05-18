@@ -85,5 +85,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

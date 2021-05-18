@@ -37,4 +37,8 @@ public interface ExpenseDao {
     @Query("SELECT * FROM expense_table ORDER BY expense_name ASC")
     LiveData< List<Expense> > getExpensesAsLiveData();
 
+    @Query("UPDATE expense_table SET expense_date = :expenseDate WHERE expense_name = :expenseName")
+    void setExpenseDate(String expenseName, String expenseDate);
+
+
 }

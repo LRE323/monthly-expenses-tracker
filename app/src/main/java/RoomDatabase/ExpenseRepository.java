@@ -23,6 +23,7 @@ public class ExpenseRepository {
 
         // Create a List<Expense> sorted by ascending expenseName.
         allExpenses = expenseDao.getExpensesAsLiveData();
+
     }
 
     // Returns the LiveData list of Expenses from Room.
@@ -52,6 +53,12 @@ public class ExpenseRepository {
     void deleteAnExpense(String expenseName) {
         ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
             expenseDao.deleteAnExpense(expenseName);
+        });
+    }
+
+    void setExpenseDate(String expenseName, String expenseDate) {
+        ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
+            expenseDao.setExpenseDate(expenseName, expenseDate);
         });
     }
 }

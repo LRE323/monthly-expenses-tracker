@@ -11,7 +11,8 @@ public class ExpenseViewModel extends AndroidViewModel {
     // Private member that holds a reference to the repository.
     private ExpenseRepository expenseRepository;
 
-    private final LiveData< List<Expense> > allExpenses;
+    private final LiveData<List<Expense>> allExpenses;
+    private List<Expense> mExpenseList;
 
     public ExpenseViewModel(Application application) {
         super(application);
@@ -19,8 +20,12 @@ public class ExpenseViewModel extends AndroidViewModel {
         allExpenses = expenseRepository.getExpensesAsLiveData();
     }
 
-    public LiveData< List<Expense> > getExpensesAsLiveData() {
+    public LiveData<List<Expense>> getExpensesAsLiveData() {
         return allExpenses;
+    }
+
+    public List<Expense> getExpenseList() {
+        return this.mExpenseList;
     }
 
     public void insert(Expense expense) {
@@ -31,9 +36,12 @@ public class ExpenseViewModel extends AndroidViewModel {
         expenseRepository.deleteAll();
     }
 
-    public void deleteAtExpense(Expense expense) {
+    public void deleteExpense(Expense expense) {
 
+        expenseRepository.deleteAnExpense(expense.getExpenseName());
+    }
 
-        expenseRepository.deleteAnExpense( expense.getExpenseName() );
+    public void setExpenseDate(String expenseName, String expenseDate) {
+        expenseRepository.setExpenseDate(expenseName, expenseDate);
     }
 }

@@ -20,11 +20,13 @@ import java.util.Calendar;
 
 public class AddExpenseActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
-    private TextView expenseNameInputEditText;
+    private TextView tvExpenseNameInput;
 
-    private TextView expenseAmountInputEditText;
+    private TextView etExpenseAmountInput;
 
-    private TextView expenseDateInputTextView;
+    private TextView tvExpenseDateInput;
+
+    private DateFormat mDateFormat = DateFormat.getDateInstance(DateFormat.LONG);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +34,9 @@ public class AddExpenseActivity extends AppCompatActivity implements DatePickerD
         setContentView(R.layout.activity_add_expense);
 
         // Create all the input objects.
-        expenseNameInputEditText = findViewById(R.id.expenseNameInput);
-        expenseAmountInputEditText = findViewById(R.id.expenseAmountInput);
-        expenseDateInputTextView = findViewById(R.id.expenseDateInput);
+        tvExpenseNameInput = findViewById(R.id.expenseNameInput);
+        etExpenseAmountInput = findViewById(R.id.expenseAmountInput);
+        tvExpenseDateInput = findViewById(R.id.expenseDateInput);
     }
 
     public void addExpense(View view) {
@@ -45,9 +47,9 @@ public class AddExpenseActivity extends AppCompatActivity implements DatePickerD
         } else {
 
             // Create the new Expense.
-            String expenseNameInputString = expenseNameInputEditText.getText().toString();
-            double expenseAmountInputDouble = Double.parseDouble(expenseAmountInputEditText.getText().toString());
-            String expenseDateInputString = expenseDateInputTextView.getText().toString();
+            String expenseNameInputString = tvExpenseNameInput.getText().toString();
+            double expenseAmountInputDouble = Double.parseDouble(etExpenseAmountInput.getText().toString());
+            String expenseDateInputString = tvExpenseDateInput.getText().toString();
 
             Expense newExpense = new Expense(expenseNameInputString, expenseAmountInputDouble, expenseDateInputString);
 
@@ -84,34 +86,33 @@ public class AddExpenseActivity extends AppCompatActivity implements DatePickerD
         Calendar calendar = Calendar.getInstance();     // getInstance() - Gets a calender using the default time and locale.
         calendar.set(year, month, dayOfMonth);     // Sets the Calendar time to the passed parameters.
 
-        // Create a new DateFormat object.
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);     // getDateInstance() - Gets the normal date format for that country.
-
         // Create a String variable that holds the date selected by the user.
-        String dateSelected = dateFormat.format( calendar.getTime() );
+        String dateSelected = this.mDateFormat.format( calendar.getTime() );
 
         // Set the text of expenseDateInputTextView to dateSelected.
-        expenseDateInputTextView.setText(dateSelected);
+        tvExpenseDateInput.setText(dateSelected);
     }
 
     private boolean isExpenseInputValid() {
 
         // Check if expenseNameInputEditText is valid.
-        String expenseNameInputAsString = expenseNameInputEditText.getText().toString();
+        String expenseNameInputAsString = tvExpenseNameInput.getText().toString();
         if ( expenseNameInputAsString.isEmpty() ) {
             Toast.makeText(this, "Please enter an expense name", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Check if expenseAmountInputEditText is valid.
-        String expenseAmountInputAsString = expenseAmountInputEditText.getText().toString();
+        String expenseAmountInputAsString = etExpenseAmountInput.getText().toString();
         if ( expenseAmountInputAsString.isEmpty() ) {
             Toast.makeText(this, "Please enter an expense amount", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         // Check if expenseDateInputTextView is valid.
-        String expenseDateInputAsString = expenseDateInputTextView.getText().toString();
+        // TODO: User should not be able to enter out-of-date Expense.
+        String expenseDateInputAsString = tvExpenseDateInput.getText().toString();
+
         if ( expenseDateInputAsString.isEmpty() ) {
             Toast.makeText(this, "Please select an expense date", Toast.LENGTH_SHORT).show();
             return false;
