@@ -40,5 +40,12 @@ public interface ExpenseDao {
     @Query("UPDATE expense_table SET expense_date = :expenseDate WHERE expense_name = :expenseName")
     void setExpenseDate(String expenseName, String expenseDate);
 
+    @Query("UPDATE expense_table SET previous_january_day = :day WHERE expense_name = :expenseName" )
+    void setPreviousJanuaryDay(String expenseName, int day);
 
+    @Query("UPDATE expense_table SET has_previous_january_day = :bool WHERE expense_name = :expenseName")
+    void setHasPreviousJanuaryDay(String expenseName, boolean bool);
+
+    @Query("UPDATE expense_table SET was_thirty_first = :bool WHERE expense_name = :expenseName")
+    void setWasThirtyFirst(String expenseName, boolean bool);
 }

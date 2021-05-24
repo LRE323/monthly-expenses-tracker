@@ -5,6 +5,8 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 public class ExpenseViewModel extends AndroidViewModel {
@@ -41,7 +43,27 @@ public class ExpenseViewModel extends AndroidViewModel {
         expenseRepository.deleteAnExpense(expense.getExpenseName());
     }
 
-    public void setExpenseDate(String expenseName, String expenseDate) {
+    public void setExpenseDate(Expense expense, Calendar calendar, DateFormat dateFormat) {
+
+        // Get name and date of the Expense.
+        String expenseName = expense.getExpenseName();
+        String expenseDate = dateFormat.format(calendar.getTime());
+
         expenseRepository.setExpenseDate(expenseName, expenseDate);
+    }
+
+    public void setPreviousJanuaryDay(Expense expense, int day) {
+        String expenseName = expense.getExpenseName();
+        expenseRepository.setPreviousJanuaryDay(expenseName, day);
+    }
+
+    public void setHasPreviousJanuaryDay(Expense expense, boolean bool) {
+        String expenseName = expense.getExpenseName();
+        this.expenseRepository.setHasPreviousJanuaryDay(expenseName, bool);
+    }
+
+    public void setWasThirtyFirst(Expense expense, boolean b) {
+        String expenseName = expense.getExpenseName();
+        this.expenseRepository.setWasThirtyFirst(expenseName, b);
     }
 }

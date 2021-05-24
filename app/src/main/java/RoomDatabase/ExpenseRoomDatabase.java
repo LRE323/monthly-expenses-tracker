@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
@@ -19,7 +20,11 @@ codelab, so we set the exportSchema to false here to avoid a build warning. In a
 should consider setting a directory for Room to use to export the schema so you can check the current
 schema into your version control system.
 */
-@Database(entities = {Expense.class}, version = 1, exportSchema = false)
+@Database(
+    version = 1,
+    entities = {Expense.class},
+    exportSchema = false
+)
 
 // The database class for Room must be abstract and extend RoomDatabase.
 public abstract class ExpenseRoomDatabase extends RoomDatabase {
@@ -51,6 +56,7 @@ public abstract class ExpenseRoomDatabase extends RoomDatabase {
 
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             ExpenseRoomDatabase.class, "expense_database")
+                            //.addMigrations(MIGRATION_1_2)
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
@@ -65,4 +71,22 @@ public abstract class ExpenseRoomDatabase extends RoomDatabase {
             super.onCreate(db);
         }
     };
+
+    /*
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            // Create the new table
+            database.execSQL(
+                    "CREATE TABLE IF NOT EXISTS expense_table_temp (vehicleId TEXT NOT NULL, updatedOn TEXT, updatedBy TEXT,vehicleClientId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL )"
+            )
+
+            database.execSQL("ALTER TABLE 'expense_table'"
+                    + " ADD COLUMN 'previous_january_day' INTEGER DEFAULT 1 not null");
+
+            database.execSQL("ALTER TABLE expense_table"
+                    + " ADD COLUMN has_previous_january_day BOOLEAN");
+        }
+    };*/
 }

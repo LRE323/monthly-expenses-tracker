@@ -61,4 +61,20 @@ public class ExpenseRepository {
             expenseDao.setExpenseDate(expenseName, expenseDate);
         });
     }
+    void setPreviousJanuaryDay(String expenseName, int day) {
+        ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
+            expenseDao.setPreviousJanuaryDay(expenseName, day);
+        });
+    }
+    void setHasPreviousJanuaryDay(String expenseName, boolean bool) {
+        ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
+            this.expenseDao.setHasPreviousJanuaryDay(expenseName, bool);
+        });
+    }
+
+    public void setWasThirtyFirst(String expenseName, boolean bool) {
+        ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
+            this.expenseDao.setWasThirtyFirst(expenseName, bool);
+        });
+    }
 }

@@ -41,19 +41,27 @@ public class Expense implements Parcelable {
     @ColumnInfo(name = "expense_date")
     private String expenseDate;
 
+    @ColumnInfo(name = "previous_january_day")
+    public int previousJanuaryDay;
+
+    @ColumnInfo(name = "has_previous_january_day")
+    public boolean hasPreviousJanuaryDay;
+
+    @ColumnInfo(name = "was_thirty_first")
+    public boolean wasThirtyFirst;
 
     // Instance variables to be ignored.
     @Ignore
     private final DateFormat mDateFormat = DateFormat.getDateInstance(DateFormat.LONG);
 
-
     @Ignore
-    private final String LOG_TAG = "Expense";
+    private final String LOG_TAG = "ExpenseClass";
 
     public Expense(@NonNull String expenseName, double expenseAmount, @NonNull String expenseDate) {
         this.expenseName = expenseName;
         this.expenseAmount = expenseAmount;
         this.expenseDate = expenseDate;
+
     }
 
     /**
@@ -71,6 +79,14 @@ public class Expense implements Parcelable {
 
     public String getExpenseDate() {
         return this.expenseDate;
+    }
+
+    public int getPreviousJanuaryDay() {
+        return this.previousJanuaryDay;
+    }
+
+    public boolean getHasPreviousJanuaryDay() {
+        return this.hasPreviousJanuaryDay;
     }
 
     public Calendar getExpenseDateCalendar() {
@@ -92,10 +108,7 @@ public class Expense implements Parcelable {
     }
 
     public int getDayInt() {
-
         int day = getExpenseDateCalendar().get(Calendar.DATE);
-
-        Log.i(LOG_TAG, this.toString() + ": DAY = " + day);
 
         return day;
     }
@@ -103,15 +116,11 @@ public class Expense implements Parcelable {
     public int getMonthInt() {
         int month = getExpenseDateCalendar().get(Calendar.MONTH);
 
-        Log.i(LOG_TAG, this.toString() + ": MONTH = " + month);
-
         return month;
     }
 
     public int getYearInt() {
         int year = getExpenseDateCalendar().get(Calendar.YEAR);
-
-        Log.i(LOG_TAG, this.toString() + ": YEAR = " + year);
 
         return year;
     }
@@ -122,10 +131,6 @@ public class Expense implements Parcelable {
 
     public void setExpenseAmount(double expenseAmount) {
         this.expenseAmount = expenseAmount;
-    }
-
-    public void setExpenseDate(Calendar calendar) {
-
     }
 
     @Override
