@@ -5,6 +5,6 @@ Monthly Expenses Tracker can be [downloaded from the Google Play Store](https://
 
 This sample showcases:
 
-* Creating and saving an expense to the Room database
+* Creating and saving an new expense to the Room database
 * Handling of the back button
 * Updating an out of date expense
