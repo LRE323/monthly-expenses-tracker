@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Monthly Expenses Tracker</string>
+    <string name="sum_of_expenses_text">Sum of monthly expenses: $ %1$s</string>
+    <string name="expense_amount">$ %1$s</string>
     <string name="title_activity_add_expense">AddExpense</string>
     <string name="header_percent_no_monthly_income">Click here to set monthly income</string>
 </resources>

@@ -5,65 +5,96 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.List;
 
 public class ExpenseViewModel extends AndroidViewModel {
-    // Private member that holds a reference to the repository.
-    private ExpenseRepository expenseRepository;
 
-    private final LiveData<List<Expense>> allExpenses;
-    private List<Expense> mExpenseList;
+    private final ExpenseRepository expenseRepository;
+
+    private final LiveData<List<Expense>> expenseLiveData;
 
     public ExpenseViewModel(Application application) {
         super(application);
-        expenseRepository = new ExpenseRepository(application);
-        allExpenses = expenseRepository.getExpensesAsLiveData();
+
+        // Create a new repository
+        this.expenseRepository = new ExpenseRepository(application);
+
+        // Get the LiveData for the list of Expenses
+        this.expenseLiveData = expenseRepository.getLiveData();
     }
 
-    public LiveData<List<Expense>> getExpensesAsLiveData() {
-        return allExpenses;
+    /**
+     * Returns the current LiveData of the Expense list.
+     *
+     */
+    public LiveData<List<Expense>> getExpenseLiveData() {
+        return this.expenseLiveData;
     }
 
-    public List<Expense> getExpenseList() {
-        return this.mExpenseList;
-    }
-
+    /**
+     * Saves the passed expense with Room.
+     * @param expense The Expense to be saved.
+     */
     public void insert(Expense expense) {
-        expenseRepository.insert(expense);
+        this.expenseRepository.insert(expense);
     }
 
+    /**
+     * Deletes all the Expenses saved in Room.
+     */
     public void deleteAll() {
-        expenseRepository.deleteAll();
+        this.expenseRepository.deleteAllExpenses();
     }
 
+    /**
+     * Deletes the passed expense from Room.
+     *
+     * @param expense The Expense to be deleted.
+     */
     public void deleteExpense(Expense expense) {
-
-        expenseRepository.deleteAnExpense(expense.getExpenseName());
+        this.expenseRepository.deleteAnExpense(expense);
     }
 
-    public void setExpenseDate(Expense expense, Calendar calendar, DateFormat dateFormat) {
-
-        // Get name and date of the Expense.
-        String expenseName = expense.getExpenseName();
-        String expenseDate = dateFormat.format(calendar.getTime());
-
-        expenseRepository.setExpenseDate(expenseName, expenseDate);
+    /**
+     * Sets the date of the passed Expense to the date specified in the Calendar object passed.
+     *
+     * @param expense The Expense that will have its expenseDate set
+     * @param calendar The time that expenseDate will be set to.
+     */
+    public void setExpenseDate(Expense expense, Calendar calendar) {
+        this.expenseRepository.setExpenseDate(expense, calendar);
     }
 
-    public void setPreviousJanuaryDay(Expense expense, int day) {
-        String expenseName = expense.getExpenseName();
-        expenseRepository.setPreviousJanuaryDay(expenseName, day);
+    /**
+     * Sets calendarDateField as the the value for the previousCalendarDate variable of the passed
+     * Expense.
+     *
+     * @param expense The Expense that will have its previousCalendarDate field set
+     * @param calendarDateField The value the field previousCalendarDate will be set to
+     */
+    public void setPreviousCalendarDateField(Expense expense, int calendarDateField) {
+        this.expenseRepository.setPreviousCalendarDateField(expense, calendarDateField);
     }
 
-    public void setHasPreviousJanuaryDay(Expense expense, boolean bool) {
-        String expenseName = expense.getExpenseName();
-        this.expenseRepository.setHasPreviousJanuaryDay(expenseName, bool);
+    /**
+     * Sets the boolean hasPreviousCalendarDateField of the passed Expense to the boolean passed.
+     *
+     * @param expense The Expense that will have its hasPreviousCalendarDateField set.
+     * @param bool The value that hasPreviousCalendarDateField will be set to.
+     */
+    public void setHasPreviousCalendarDateField(Expense expense, boolean bool) {
+        String expenseName = expense.expenseName;
+        this.expenseRepository.setHasPreviousCalendarDateField(expense, bool);
     }
 
-    public void setWasThirtyFirst(Expense expense, boolean b) {
-        String expenseName = expense.getExpenseName();
-        this.expenseRepository.setWasThirtyFirst(expenseName, b);
+    /**
+     * Sets the boolean wasThirtyFirst of the passed Expense to the boolean passed.
+     *
+     * @param expense The Expense that will have its boolean wasThirtyFirst set.
+     * @param bool The value that wasThirtyFirst will be set to.
+     */
+    public void setWasThirtyFirst(Expense expense, boolean bool) {
+        this.expenseRepository.setWasThirtyFirst(expense, bool);
     }
 }

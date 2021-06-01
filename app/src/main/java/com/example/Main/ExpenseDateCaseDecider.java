@@ -5,18 +5,21 @@ import java.util.Calendar;
 import java.util.List;
 
 import RoomDatabase.Expense;
-import RoomDatabase.ExpenseViewModel;
 
 /**
- * This class is used  to decide which case will be executed depending on the full Expense date
- * using the method .decideCase(expense).
+ * This class is used to decide which case will be executed by ExpenseDateUpdater in order to update
+ * the Expense.
  */
 public class ExpenseDateCaseDecider {
-    private final int currentYearInteger; // The current year is an integer.
-    List<Integer> monthsWithThirtyDays; //A list of months that have 30 days.
+    private final int currentCalendarYearField;
 
-    public ExpenseDateCaseDecider(Calendar calendar) {
-        this.currentYearInteger = calendar.get(Calendar.YEAR);
+    /**
+     * A list of months with thirty days.
+     */
+    List<Integer> monthsWithThirtyDays = new ArrayList<>(); //A list of months that have 30 days.
+
+    public ExpenseDateCaseDecider(Calendar currentCalendar) {
+        this.currentCalendarYearField = currentCalendar.get(Calendar.YEAR);
         this.assignMonthsWithThirtyDays();
     }
 
@@ -29,70 +32,70 @@ public class ExpenseDateCaseDecider {
     public int decideCase(Expense expense) {
 
         // Get all the required objects.
-        int expenseDayInt = expense.getDayInt();
-        int expenseMonthInt = expense.getMonthInt();
-        boolean hasPreviousJanuaryDay = expense.hasPreviousJanuaryDay;
+        int expenseCalendarDateField = expense.getCalendarDateField();
+        int expenseCalendarMonthField = expense.getCalendarMonthField();
+        boolean hasPreviousCalendarDateField = expense.hasPreviousCalendarDateField;
         boolean wasThirtyFirst = expense.wasThirtyFirst;
 
         // If the Expense month is December.
-        if (expenseMonthInt == Calendar.DECEMBER) {
+        if (expenseCalendarMonthField == Calendar.DECEMBER) {
             // Return case 2.
             return 2;
         }
 
-        // If Expense month is February AND hasPreviousJanuaryDay is true.
-        if (expenseMonthInt == Calendar.FEBRUARY && hasPreviousJanuaryDay) {
+        // If the Expense month is February AND hasPreviousCalendarDateField is true.
+        if (expenseCalendarMonthField == Calendar.FEBRUARY && hasPreviousCalendarDateField) {
             // Return case 4
             return 4;
         }
 
-        // If the Expense day is between the 1st and the 28th.
-        if ((expenseDayInt >= 1) && (expenseDayInt <= 28)) {
+        // If the Expense date is between the 1st and the 28th.
+        if ((expenseCalendarDateField >= 1) && (expenseCalendarDateField <= 28)) {
 
             // If the Expense month is between January and November.
-            if ((expenseMonthInt >= Calendar.JANUARY) && (expenseMonthInt <= Calendar.NOVEMBER)) {
+            if ((expenseCalendarMonthField >= Calendar.JANUARY) && (expenseCalendarMonthField <= Calendar.NOVEMBER)) {
 
                 // Return case 1.
                 return 1;
             }
         }
 
-        // If the Expense day is the 29th.
-        if (expenseDayInt == 29) {
+        // If the Expense date is the 29th.
+        if (expenseCalendarDateField == 29) {
 
             // If the current year is a leap year.
             if (isLeapYear()) {
 
                 // If the Expense month is between January and November, eg. not December.
-                if ((expenseMonthInt >= Calendar.JANUARY) && (expenseMonthInt <= Calendar.NOVEMBER)) {
+                if ((expenseCalendarMonthField >= Calendar.JANUARY) && (expenseCalendarMonthField <= Calendar.NOVEMBER)) {
                     // Return case 1.
                     return 1;
                 }
 
-            // If the current year is not a leap year.
+                // If the current year is not a leap year.
             } else {
 
                 // If the expense month is January, there is an issue because February has 28 days.
-                if (expenseMonthInt == Calendar.JANUARY) {
+                if (expenseCalendarMonthField == Calendar.JANUARY) {
                     // Return case 3.
                     return 3;
                 }
 
                 // If the expense month is between March and November.
-                if ((expenseMonthInt >= Calendar.MARCH) && (expenseMonthInt <= Calendar.NOVEMBER)) {
+                if ((expenseCalendarMonthField >= Calendar.MARCH) && (expenseCalendarMonthField <= Calendar.NOVEMBER)) {
                     // Return case 1.
                     return 1;
                 }
             }
         }
 
-        // If the Expense day is the 30th.
-        if (expenseDayInt == 30) {
+        // If the Expense date is the 30th.
+        if (expenseCalendarDateField == 30) {
 
-            int nextMonth = expenseMonthInt + 1;
+            int nextMonth = expenseCalendarMonthField + 1;
             boolean nextMonthHasThirtyDays = this.monthsWithThirtyDays.contains(nextMonth);
 
-            // If the Expense day was previously the 31st and the next Expense month has 31 days.
+            // If the Expense date was previously the 31st and the next Expense month has 31 days.
             if (wasThirtyFirst && !(nextMonthHasThirtyDays)) {
                 // Return case 6.
                 return 6;
@@ -100,13 +103,13 @@ public class ExpenseDateCaseDecider {
 
             // If the Expense month is January, there is an issue because February does not have
             // 30 days.
-            if (expenseMonthInt == Calendar.JANUARY) {
+            if (expenseCalendarMonthField == Calendar.JANUARY) {
                 // Return case 3
                 return 3;
             }
 
             // If the Expense month is between March and November.
-            if ((expenseMonthInt >= Calendar.MARCH) && (expenseMonthInt <= Calendar.NOVEMBER)) {
+            if ((expenseCalendarMonthField >= Calendar.MARCH) && (expenseCalendarMonthField <= Calendar.NOVEMBER)) {
                 // Return case 1.
                 return 1;
             }
@@ -114,24 +117,25 @@ public class ExpenseDateCaseDecider {
         }
 
         // If the Expense day is the 31st there is an issue because not all months have 31 days.
-        if (expenseDayInt == 31) {
+        if (expenseCalendarDateField == 31) {
 
             // If the current month is January there is an issue,
             // because February does not have 31 days.
-            if (expenseMonthInt == Calendar.JANUARY) {
+            if (expenseCalendarMonthField == Calendar.JANUARY) {
                 // Return case 3
                 return 3;
             }
 
             // If the Expense month is between March and November.
-            if (expenseMonthInt >= Calendar.MARCH && expenseMonthInt <= Calendar.NOVEMBER) {
+            if (expenseCalendarMonthField >= Calendar.MARCH
+                    && expenseCalendarMonthField <= Calendar.NOVEMBER) {
 
                 // Create a variable to hold the integer of next month.
-                int nextMonth = expenseMonthInt + 1;
+                int nextMonth = expenseCalendarMonthField + 1;
 
                 // If the Expense month is July there no issues
                 // because both July and August have 31 days.
-                if (expenseMonthInt == Calendar.JULY) {
+                if (expenseCalendarMonthField == Calendar.JULY) {
                     // Return case 1.
                     return 1;
                 }
@@ -154,28 +158,24 @@ public class ExpenseDateCaseDecider {
      */
     boolean isLeapYear() {
 
-        // The Gregorian calendar stipulates that a years evenly divisible by 100
-        // (for example, 1900) is a leap year only if it is ALSO evenly divisible by 400.
-        if (this.currentYearInteger % 100 == 0) {
-            if (this.currentYearInteger % 400 == 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            if (this.currentYearInteger % 4 == 0) {
-                return true;
-            }
-        }
-        return false;
+        /**
+         * A leap year is a year evenly divisible by 4.
+         *
+         * "The Gregorian calendar also stipulates that a years evenly divisible by 100
+         * (for example, 1900) is a leap year only if it is ALSO evenly divisible by 400."
+         *
+         */
+        if ((this.currentCalendarYearField % 100 == 0)
+                && (this.currentCalendarYearField % 400 == 0)) {
+            return true;
+        } else return this.currentCalendarYearField % 4 == 0;
     }
 
     /**
-     * Populates the monthsWithThirtyDays with the integers of months that have thirty days.
+     * Populates the list monthsWithThirtyDays with the Calendar.MONTH field of months that have 30
+     * days.
      */
     private void assignMonthsWithThirtyDays() {
-        // Create the ArrayList
-        this.monthsWithThirtyDays = new ArrayList<>();
 
         // Add all the months with thirty days.
         this.monthsWithThirtyDays.add(Calendar.APRIL);

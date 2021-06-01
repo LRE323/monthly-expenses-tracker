@@ -4,77 +4,125 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 public class ExpenseRepository {
 
-    private ExpenseDao expenseDao;
-    private LiveData< List<Expense> > allExpenses;
+    private final ExpenseDao expenseDao;
+    private LiveData< List<Expense> > expenseList;
 
-    // Constructor method.
     ExpenseRepository(Application application) {
 
         // Access the database, creating it if it's the first time it's being accessed.
-        ExpenseRoomDatabase db = ExpenseRoomDatabase.getDatabase(application);
+        ExpenseRoomDatabase database = ExpenseRoomDatabase.getDatabase(application);
 
-        // This is calling an abstract method, not sure what is going on here.
-        // Assign a value to expenseDao(?)
-        expenseDao = db.expenseDao();
+       expenseDao = database.expenseDao();
 
-        // Create a List<Expense> sorted by ascending expenseName.
-        allExpenses = expenseDao.getExpensesAsLiveData();
-
+        // Get the LiveData
+        expenseList = expenseDao.getLiveData();
     }
 
-    // Returns the LiveData list of Expenses from Room.
-    LiveData< List<Expense> > getExpensesAsLiveData() {
-        return allExpenses;
+    /**
+     * Returns the LiveData from Room.
+     *
+     * @return expenseList The LiveData returned
+     */
+    LiveData< List<Expense> > getLiveData() {
+        return expenseList;
     }
 
-    /*
-    You must call this on a non-UI thread or your app will throw an exception. Room ensures
-    that you're not doing any long running operations on the main thread, blocking the UI.
+    /**
+     * We need to run the following methods on a background thread or the app will throw an
+     * exception.
+     */
 
-    We need to not run the insert on the main thread so we use the ExecutorService we created in
-    the WordRoomDatabase to perform the insert on a background thread.
-    */
+    /**
+     * Adds the Expense to the database.
+     *
+     * @param expense The Expense added to the database.
+     */
     void insert(Expense expense) {
         ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
             expenseDao.insert(expense);
         });
     }
 
-    void deleteAll() {
+    /**
+     * Deletes all the Expenses in the database.
+     */
+    void deleteAllExpenses() {
         ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
-            expenseDao.deleteAll();
+            expenseDao.deleteAllExpenses();
         });
     }
 
-    void deleteAnExpense(String expenseName) {
+    /**
+     * Deletes an Expense with the specified expenseName.
+     *
+     * @param expense The Expense to be deleted.
+     */
+    void deleteAnExpense(Expense expense) {
         ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
-            expenseDao.deleteAnExpense(expenseName);
+            expenseDao.deleteAnExpense(expense.expenseName);
         });
     }
 
-    void setExpenseDate(String expenseName, String expenseDate) {
+    /**
+     * Sets the field expenseDate for the passed expense to the time in the calendar passed.
+     *
+     * @param expense The Expense for which expenseDate will be set.
+     * @param calendar The time that expenseDate will be set to.
+     */
+    void setExpenseDate(Expense expense, Calendar calendar) {
         ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
-            expenseDao.setExpenseDate(expenseName, expenseDate);
-        });
-    }
-    void setPreviousJanuaryDay(String expenseName, int day) {
-        ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
-            expenseDao.setPreviousJanuaryDay(expenseName, day);
-        });
-    }
-    void setHasPreviousJanuaryDay(String expenseName, boolean bool) {
-        ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
-            this.expenseDao.setHasPreviousJanuaryDay(expenseName, bool);
+
+            // Create a new DateFormat object.
+            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
+
+            // Format the Calendar object into a string.
+            String expenseDate = dateFormat.format(calendar.getTime());
+
+            // Submit.
+            expenseDao.setExpenseDate(expense.expenseName, expenseDate);
         });
     }
 
-    public void setWasThirtyFirst(String expenseName, boolean bool) {
+    /**
+     * Sets calendarDateField as the the value for the previousCalendarDate variable of the passed
+     * expense.
+     *
+     * @param expense The Expense that will have its previousCalendarDate field set
+     * @param calendarDateField The value the field previousCalendarDate will be set to
+     */
+    void setPreviousCalendarDateField(Expense expense, int calendarDateField) {
         ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
-            this.expenseDao.setWasThirtyFirst(expenseName, bool);
+            expenseDao.setPreviousCalendarDateField(expense.expenseName, calendarDateField);
+        });
+    }
+
+    /**
+     * Sets the boolean hasPreviousCalendarDateField of the passed expense to the boolean passed.
+     *
+     * @param expense The Expense that will have its boolean hasPreviousCalendarDateField set.
+     * @param bool The value that hasPreviousCalendarDateField will be set to.
+     */
+    void setHasPreviousCalendarDateField(Expense expense, boolean bool) {
+        ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
+            this.expenseDao.setPreviousCalendarDateField(expense.expenseName, bool);
+        });
+    }
+
+    /**
+     * Sets the boolean wasThirtyFirst of the passed expense to the boolean passed.
+     *
+     * @param expense The Expense that will have its boolean wasThirtyFirst set.
+     * @param bool The value that wasThirtyFirst will be set to.
+     */
+    public void setWasThirtyFirst(Expense expense, boolean bool) {
+        ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
+            this.expenseDao.setWasThirtyFirst(expense.expenseName, bool);
         });
     }
 }

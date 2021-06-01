@@ -12,14 +12,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/*
-You annotate the class to be a Room database with @Database and use the annotation parameters to
-declare the entities that belong in the database and set the version number. Each entity corresponds
-to a table that will be created in the database. Database migrations are beyond the scope of this
-codelab, so we set the exportSchema to false here to avoid a build warning. In a real app, you
-should consider setting a directory for Room to use to export the schema so you can check the current
-schema into your version control system.
-*/
 @Database(
     version = 1,
     entities = {Expense.class},
@@ -72,21 +64,4 @@ public abstract class ExpenseRoomDatabase extends RoomDatabase {
         }
     };
 
-    /*
-    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
-
-        @Override
-        public void migrate(SupportSQLiteDatabase database) {
-            // Create the new table
-            database.execSQL(
-                    "CREATE TABLE IF NOT EXISTS expense_table_temp (vehicleId TEXT NOT NULL, updatedOn TEXT, updatedBy TEXT,vehicleClientId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL )"
-            )
-
-            database.execSQL("ALTER TABLE 'expense_table'"
-                    + " ADD COLUMN 'previous_january_day' INTEGER DEFAULT 1 not null");
-
-            database.execSQL("ALTER TABLE expense_table"
-                    + " ADD COLUMN has_previous_january_day BOOLEAN");
-        }
-    };*/
 }

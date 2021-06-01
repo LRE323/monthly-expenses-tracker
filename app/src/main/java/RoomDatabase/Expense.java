@@ -3,7 +3,6 @@ package RoomDatabase;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -16,38 +15,30 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
-/*
-Entity: Annotated class that describes a database table when working with Room.
-Each @Entity class represents a SQLite table. Annotate your class declaration to indicate that it's
-an entity. You can specify the name of the table if you want it to be different from the name
-of the class. This names the table "word_table".
+/**
+ * The @Entity annotation indicates Room that this class is an entity.
+ *
+ * Each @Entity class represents a SQLite database table.
  */
 @Entity(tableName = "expense_table")
+
 public class Expense implements Parcelable {
-    // Did not auto generate key because I don't want the user to create multiple Expenses with the
-    // same expenseName.
-
-    // Each Room entity must identify a primary key that uniquely identifies each row in the
-    // corresponding database table.
+    /** A primary key the uniquely identifies each row in the database table must declared.*/
     @PrimaryKey
-    @NonNull  // Denotes that a parameter, field, or method return value can never be null.
-    @ColumnInfo(name = "expense_name") // Specifies the name of the column.
-    private String expenseName;
+    @NonNull
+    public String expenseName; // Name of the Expense.
 
-    @ColumnInfo(name = "expense_amount")
-    private double expenseAmount;
+    public double expenseAmount; // Money amount of the Expense.
 
     @NonNull
-    @ColumnInfo(name = "expense_date")
-    private String expenseDate;
+    public String expenseDate; // The full date on which the Expense will be charged.
 
-    @ColumnInfo(name = "previous_january_day")
-    public int previousJanuaryDay;
+    public int previousCalendarDateField; // A previous field of Calendar.DATE for this Expense.
 
-    @ColumnInfo(name = "has_previous_january_day")
-    public boolean hasPreviousJanuaryDay;
+    // If the Expense has a previous Calendar.DATE field.
+    public boolean hasPreviousCalendarDateField;
 
-    @ColumnInfo(name = "was_thirty_first")
+    // The the Calendar.DATE field of this Expense was previously set to 31.
     public boolean wasThirtyFirst;
 
     // Instance variables to be ignored.
@@ -65,32 +56,13 @@ public class Expense implements Parcelable {
     }
 
     /**
-     * Every field that's stored in the database needs to be either public (private in this class)
-     * or have a "getter" method.
+     * Parses the value of expenseDate into a Calendar object and returns the Calendar object.
+     *
+     * @return calendar A Calendar object, parsed from expenseDate
      */
+    public Calendar getCalendar() {
 
-    public String getExpenseName() {
-        return this.expenseName;
-    }
-
-    public double getExpenseAmount() {
-        return this.expenseAmount;
-    }
-
-    public String getExpenseDate() {
-        return this.expenseDate;
-    }
-
-    public int getPreviousJanuaryDay() {
-        return this.previousJanuaryDay;
-    }
-
-    public boolean getHasPreviousJanuaryDay() {
-        return this.hasPreviousJanuaryDay;
-    }
-
-    public Calendar getExpenseDateCalendar() {
-
+        // Create a null Date object, to hold the value of the parsed expenseDate
         Date date = null;
 
         try {
@@ -100,37 +72,34 @@ public class Expense implements Parcelable {
         } catch (ParseException e) {
 
         }
-        // Create new Calendar and set the time.
+        // Create new Calendar and set the time to date.
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
         return calendar;
     }
 
-    public int getDayInt() {
-        int day = getExpenseDateCalendar().get(Calendar.DATE);
+    /**
+     * Returns the Calendar.DATE field of the parsed expenseDate.
+     *
+     * @return calendarDateField The Calendar.DATE field from the parsed expenseDate
+     */
+    public int getCalendarDateField() {
+        int calendarDateField = getCalendar().get(Calendar.DATE);
 
-        return day;
+        return calendarDateField;
     }
 
-    public int getMonthInt() {
-        int month = getExpenseDateCalendar().get(Calendar.MONTH);
 
-        return month;
-    }
+    /**
+     * Returns the Calendar.MONTH field of the parsed expenseDate.
+     *
+     * @return calendarMonthField The Calendar.MONTH field from the parsed expenseDate
+     */
+    public int getCalendarMonthField() {
+        int calendarMonthField = getCalendar().get(Calendar.MONTH);
 
-    public int getYearInt() {
-        int year = getExpenseDateCalendar().get(Calendar.YEAR);
-
-        return year;
-    }
-
-    public void setExpenseName(String expenseName) {
-        this.expenseName = expenseName;
-    }
-
-    public void setExpenseAmount(double expenseAmount) {
-        this.expenseAmount = expenseAmount;
+        return calendarMonthField;
     }
 
     @Override
@@ -138,7 +107,10 @@ public class Expense implements Parcelable {
         return this.expenseName;
     }
 
-    // Parcelable methods
+    /**
+     * The following are all implemented parcelable methods.
+     */
+
     protected Expense(Parcel in) {
         expenseName = in.readString();
         expenseAmount = in.readDouble();

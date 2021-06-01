@@ -1,11 +1,5 @@
 package com.example.Main;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,33 +8,54 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import RoomDatabase.Expense;
-import RoomDatabase.ExpenseViewModel;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.monthlyexpensestracker.R;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.util.Date;
 import java.util.List;
+
+import RoomDatabase.Expense;
+import RoomDatabase.ExpenseViewModel;
 
 public class MainActivity extends AppCompatActivity implements ExpenseViewHolder.OnExpenseListener {
 
-    public final int ADD_EXPENSE_ACTIVITY_REQUEST_CODE = 100;
+    /**
+     * The activity request code for AddExpenseActivity.
+     */
+    public final int addExpenseActivityRequestCode = 1;
 
-    // Room database variables.
-    private ExpenseViewModel mExpenseViewModel;
+    /**
+     * The ViewModel for the Room database.
+     */
+    private ExpenseViewModel expenseViewModel;
 
-    // UI Components.
+    // User interface objects
+    /**
+     * The TextView that displays the sum of all the expenses, sumOfExpenses.
+     */
     private TextView tvSumOfExpenses;
-    private ExpenseListAdapter mExpenseListAdapter;
+    /**
+     * The required ListAdapter for the RecyclerView used to display the list of expenses.
+     */
+    private ExpenseListAdapter expenseListAdapter;
 
-    // Misc. instance variables.
-    private double mSumOfExpenseList;
-    private ExpenseDateUpdater mExpenseDateUpdater;
+    /**
+     * The total sum of expenseAmount of the expenses.
+     */
+    private String sumOfExpenses;
 
-    // Logcat Tags
+    /**
+     * Used to update the expenses.
+     */
+    private ExpenseDateUpdater updater;
+
+    /**
+     * Logcat tags
+     */
     private final String LOG_TAG = "MainActivity";
     private final String MAIN_ACTIVITY_LIFECYCLE = "MainActivityLifecycle";
 
@@ -50,107 +65,62 @@ public class MainActivity extends AppCompatActivity implements ExpenseViewHolder
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        create_all_XML_objects();
+        // Creates all the necessary user interface objects.
+        createUserInterfaceObjects();
 
+        // Creates all the required listeners.
+        // This method is currently disabled and will be implemented in later version.
         createAllOnClickListeners();
 
+        // Connects to the Room database.
         connectToRoomDatabase();
 
-        mExpenseDateUpdater = new ExpenseDateUpdater(mExpenseViewModel);
+        // Creates a new ExpenseDateUpdater
+        this.updater = new ExpenseDateUpdater(expenseViewModel);
 
-        createDummyExpenses();
-
+        // Observes the LiveData of the list of expenses saved in Room.
         observeExpenses();
 
-        // Delete all previously made expenses. For development purposes.
-        //mExpenseViewModel.deleteAll();
+    }
+
+    /**
+     * Creates all the necessary user interface (XML) objects.
+     */
+    private void createUserInterfaceObjects() {
+        // The TextView that displays the sum of all the expenses, sumOfExpenses.
+        tvSumOfExpenses = findViewById(R.id.tvSumOfExpenses);
+
+        // Goes through all the necessary processes needed to have a functioning RecyclerView for
+        // the list of expenses.
+        createRecyclerViewAndRelated();
 
     }
 
-    private void observeExpenses() {
+    /**
+     * Goes through all the necessary processes needed to have a functioning RecyclerView for the
+     * list of expenses.
+     */
+    private void createRecyclerViewAndRelated() {
+        // The RecyclerView used for the list of expenses
+        RecyclerView rvExpenseList = findViewById(R.id.recyclerView);
 
-        // Add an observer for the LiveData. The onChanged() method fires when the observed data
-        // changes and the activity is in the foreground.
+        // The ListAdapter needed for rvExpenseList
+        expenseListAdapter =
+                new ExpenseListAdapter(new ExpenseListAdapter.ExpenseDiff(), this,
+                        getApplicationContext());
 
-        // Get the LiveData from Room.
-        LiveData<List<Expense>> expenseListLiveData = mExpenseViewModel.getExpensesAsLiveData();
+        // Connect expenseListAdapter to rvExpenseList
+        rvExpenseList.setAdapter(expenseListAdapter);
 
-        // Observe the LiveData in MainActivity.
-        Log.i(LOG_TAG, "Start of .observe() lambda block.");
-        expenseListLiveData.observe(this, expenseList -> {
-            Log.i(LOG_TAG, "Entering .observe() lambda block...");
-
-            // Sort expense list.
-            sortExpensesByDate(expenseList);
-
-            // Update the expenseDates of the Expense list if needed.
-            //mExpenseDateUpdater.start(mExpenseList);
-
-            // Calculate the sum of the expense list.
-            mSumOfExpenseList = getSumOfExpenseList(expenseList);
-
-            // Set the text for the TextView objects in headersHolder.
-            setHeadersHolderText();
-
-            // Update the cached copy of the words in the adapter.
-            mExpenseListAdapter.submitList(expenseList);
-
-            Log.i(LOG_TAG, "Exiting .observe() lambda block...");
-        });
-        Log.i(LOG_TAG, "End of .observe() lambda block");
+        // Give rvExpenseList a default layout manager.
+        rvExpenseList.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    // TODO: After initial release: Change this method, it is deprecated.
-    //Starts AddExpenseActivity
-    public void openAddNewExpenseActivity(View view) {
-        //Create a new intent
-        Intent intent = new Intent(this, AddExpenseActivity.class);
-
-            /*
-            Per Android documentation: While the underlying startActivityForResult() and
-            onActivityResult() APIs are available on the Activity class on all API levels,
-            it is strongly recommended to use the Activity Result APIs introduced in
-            AndroidX Activity and Fragment.
-            */
-        // Start the activity.
-        startActivityForResult(intent, ADD_EXPENSE_ACTIVITY_REQUEST_CODE);
-    }
-
-    // TODO: After initial release: Change this method, it is deprecated.
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        Log.i(LOG_TAG, "onActivityResult");
-
-        // If the return was successful.
-
-        if (resultCode == MainActivity.RESULT_OK) {
-
-            // If we are returning from AddExpenseActivity
-            if (requestCode == ADD_EXPENSE_ACTIVITY_REQUEST_CODE) {
-
-                // If the intent has an extra.
-                if (intent.hasExtra("newExpense")) {
-
-                    // Get the new Expense created by the user.
-                    Expense newExpense = intent.getParcelableExtra("newExpense");
-                    Log.i(LOG_TAG, "Intent has Expense extra");
-                    Log.i(LOG_TAG, "New expense created: " + newExpense.toString());
-
-                    // Add newExpense to the database.
-                    mExpenseViewModel.insert(newExpense);
-                }
-            }
-        } else {
-            // Do nothing.
-        }
-    }
-
-    private void connectToRoomDatabase() {
-        // Get a ViewModel from the ViewModelProvider
-        mExpenseViewModel = new ViewModelProvider(this).get(ExpenseViewModel.class);
-    }
-
+    /**
+     * Creates all the listeners needed for this activity.
+     * <p>
+     * This method is currently disabled and will be implemented in later version.
+     */
     private void createAllOnClickListeners() {
             /*
             tvPercentOfIncome.setOnLongClickListener(new View.OnLongClickListener() {
@@ -166,138 +136,139 @@ public class MainActivity extends AppCompatActivity implements ExpenseViewHolder
 
     }
 
-    // Sets the text for all TextViews in the LinearLayout headersHolder.
-    private void setHeadersHolderText() {
-        setTextForTextViewSumOfExpenses(mSumOfExpenseList);
-        //setHeaderPaycheckText();
-        //setHeaderPercentText();
+    /**
+     * Connects to the Room database by creating a ViewModel object.
+     */
+    private void connectToRoomDatabase() {
+        expenseViewModel = new ViewModelProvider(this).get(ExpenseViewModel.class);
     }
 
-    private void setTextForTextViewSumOfExpenses(double sum) {
-        String sumOfExpensesFormatted = String.format("%.2f", sum);
-        tvSumOfExpenses.setText("Sum of monthly expenses: $" + sumOfExpensesFormatted);
+    /**
+     * Observes the LiveData of the list of expenses saved in Room.
+     * <p>
+     * Sorts the expenseList by date and calculates the sum of expenseList before submitting the
+     * list to expenseListAdapter.
+     */
+    private void observeExpenses() {
 
+        // Get the LiveData from Room.
+        LiveData<List<Expense>> expenseListLiveData = this.expenseViewModel.getExpenseLiveData();
+
+        // Observe the LiveData in MainActivity.
+        expenseListLiveData.observe(this, expenseList -> {
+
+            // Sort the expenses before submitting them to expenseListAdapter.
+            ExpenseListSorter sorter = new ExpenseListSorter();
+            sorter.sort(expenseList);
+            //sortExpensesByDate(expenseList);
+
+            // Calculate the sum of the expenseList.
+            this.sumOfExpenses = getSumOfExpenses(expenseList);
+
+            // Set the text for tvSumOfExpenses
+            setTextForTextViewSumOfExpenses(this.sumOfExpenses);
+
+            //Submit the expenseList to the expenseListAdapter
+            expenseListAdapter.submitList(expenseList);
+
+        });
     }
 
-        /*
-        private void setHeaderPaycheckText() {
-            // TODO: Set the text in tvUpcomingPayments with paycheck date info.
-            tvUpcomingPayments.setText("You will pay $###.## between now and your next paycheck.");
+    /**
+     * Returns the sum of expenseAmount for all the expenses in expenseList.
+     *
+     * @param expenseList The list of expenses that will be summed.
+     * @return sum The sun of expenseAmount for all the expenses in expenseList.
+     */
+    private String getSumOfExpenses(List<Expense> expenseList) {
+        double sum = 0;
+
+        for (Expense expense : expenseList) {
+            double currentExpenseAmount = expense.expenseAmount;
+            sum += currentExpenseAmount;
         }
-
-        private void setHeaderPercentText() {
-            // TODO: Set the text in tvPercentOfIncome with paycheck amount info.
-            //tvPercentOfIncome.setText("Your monthly expenses make up ##% of your monthly income.");
-        }
-         */
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.i(MAIN_ACTIVITY_LIFECYCLE, "onStart");
+        // Format and return the sum.
+        return String.format("%.2f", sum);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.i(MAIN_ACTIVITY_LIFECYCLE, "onResume");
+    /**
+     * Sets the text for the tvSumOfExpenses with the String provided.
+     *
+     * @param sum The sum of expenseList.
+     */
+    private void setTextForTextViewSumOfExpenses(String sum) {
 
-        // Start the expense date updater if possible.
-        if ( this.mExpenseListAdapter.getCurrentList().size() != 0 ) {
-            this.mExpenseDateUpdater.start(this.mExpenseListAdapter.getCurrentList());
-        }
+        String text = getString(R.string.sum_of_expenses_text, sum);
+
+        tvSumOfExpenses.setText(text);
+
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.i(MAIN_ACTIVITY_LIFECYCLE, "onPause");
+    // TODO: After initial release: Change this method, it is deprecated.
+
+    /**
+     * Starts AddExpenseActivity
+     *
+     * @param view
+     */
+    public void openAddNewExpenseActivity(View view) {
+        //Create a new intent
+        Intent intent = new Intent(this, AddExpenseActivity.class);
+
+            /*
+            Per Android documentation: While the underlying startActivityForResult() and
+            onActivityResult() APIs are available on the Activity class on all API levels,
+            it is strongly recommended to use the Activity Result APIs introduced in
+            AndroidX Activity and Fragment.
+            */
+        // Start the activity.
+        startActivityForResult(intent, addExpenseActivityRequestCode);
     }
 
-    private void sortExpensesByDate(List<Expense> expenseList) {
+    // TODO: After initial release: Change this method, it is deprecated.
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
 
-        // Create a new DateFormat object, to parse expenseDate for every Expense.
-        DateFormat dateFormat = DateFormat.getDateInstance();
+        // If the return was successful.
+        if (resultCode == MainActivity.RESULT_OK) {
 
-        ParsePosition pp = new ParsePosition(0);
+            // If we are returning from AddExpenseActivity
+            if (requestCode == addExpenseActivityRequestCode) {
 
-        for (int i = 1; i < expenseList.size(); i++) {
-            int k = i;
+                // If the intent has an extra.
+                if (intent.hasExtra("newExpense")) {
 
-            try {
+                    // Get the new Expense created by the user.
+                    Expense newExpense = intent.getParcelableExtra("newExpense");
 
-                while (k > 0) {
-                    // Get Expenses.
-                    Expense currentExpenseObject = expenseList.get(k);
-                    Expense previousExpenseObject = expenseList.get(k - 1);
-
-                    // Get expenseDates.
-                    String currentExpenseDateString = currentExpenseObject.getExpenseDate();
-                    String previousExpenseDateString = previousExpenseObject.getExpenseDate();
-
-                    // Parse to Date objects.
-                    Date currentDateObject = dateFormat.parse(currentExpenseDateString);
-                    Date previousDateObject = dateFormat.parse(previousExpenseDateString);
-
-
-                    if (currentDateObject.before(previousDateObject)) {
-
-                        // Swap.
-                        expenseList.set(k - 1, currentExpenseObject);
-                        expenseList.set(k, previousExpenseObject);
-
-                        // Go down the list.
-                        k--;
-                    } else {
-                        break;
-                    }
+                    // Add newExpense to the database.
+                    expenseViewModel.insert(newExpense);
                 }
-            } catch (ParseException e) {
             }
         }
     }
 
-    private void createDummyExpenses() {
-        mExpenseViewModel.insert(new Expense("Expense 1", 0.99, "April 24, 2021"));
-        mExpenseViewModel.insert(new Expense("Expense 2", 1.99, "May 1, 2021"));
-        mExpenseViewModel.insert(new Expense("Expense 3", 2.99, "June 4, 2021"));
-    }
+    /**
+     * The outdated expenses in expenseList are updated when onResume is called.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-    private void create_all_XML_objects() {
-        tvSumOfExpenses = findViewById(R.id.tvSumOfExpenses);
-        //tvUpcomingPayments = findViewById(R.id.tvUpcomingPayments);
-        //tvPercentOfIncome = findViewById(R.id.tvPercentOfIncome);
-
-        // Get a handle to the RecyclerView.
-        createRecyclerViewAndRelated();
-
-    }
-
-    private void createRecyclerViewAndRelated() {
-        // These two will be added in a later version.
-        //private TextView tvUpcomingPayments;
-        //private TextView tvPercentOfIncome;
-        RecyclerView rvExpenseList = findViewById(R.id.recyclerView);
-
-        // Create an adapter.
-        mExpenseListAdapter = new ExpenseListAdapter(new ExpenseListAdapter.ExpenseDiff(), this);
-
-        // Connect the adapter with the RecyclerView.
-        rvExpenseList.setAdapter(mExpenseListAdapter);
-
-        // Give the RecyclerView a default layout manager.
-        rvExpenseList.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    private double getSumOfExpenseList(List<Expense> expenseList) {
-        double sum = 0;
-        for (Expense expense : expenseList) {
-            double currentExpenseAmount = expense.getExpenseAmount();
-            sum += currentExpenseAmount;
+        // Start the expense date updater if possible.
+        if (this.expenseListAdapter.getCurrentList().size() != 0) {
+            this.updater.start(this.expenseListAdapter.getCurrentList());
         }
-        return sum;
     }
 
+    /**
+     * Shows when the user long clicks an expense in the RecyclerView for expenseList.
+     * <p>
+     * Allows the user to delete an expense.
+     *
+     * @param position The index of the clicked expense in expenseList.
+     */
     @Override
     public void onExpenseClick(int position) {
 
@@ -305,13 +276,10 @@ public class MainActivity extends AppCompatActivity implements ExpenseViewHolder
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
         // Create the OnClickListener.
-        DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
 
-                // Delete the row at position in expense_table
-                mExpenseViewModel.deleteExpense(mExpenseListAdapter.getCurrentList().get(position));
-            }
+            // Delete the row at position in expense_table
+            expenseViewModel.deleteExpense(expenseListAdapter.getCurrentList().get(position));
         };
 
         // Set the message for the AlertDialog.
