@@ -8,3 +8,5 @@ This sample showcases:
 * Creating and saving an new expense to the Room database
 * Handling of the back button
 * Updating an out of date expense
+* Deleting an expense
+* Sorting the expenses by date
