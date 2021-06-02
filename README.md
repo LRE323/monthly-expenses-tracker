@@ -13,6 +13,6 @@ This demonstration showcases:
 * Deleting an expense
 * Sorting the expenses by date
 
-###### MainActivity
+### MainActivity
 
 ![Image of MainActivity](https://i.imgur.com/FjAobBl.jpg) ![Image of AddExpense](https://i.imgur.com/fHznd3l.jpg)
