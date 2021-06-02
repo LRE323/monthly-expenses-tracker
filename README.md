@@ -13,4 +13,6 @@ This demonstration showcases:
 * Deleting an expense
 * Sorting the expenses by date
 
+
+The two activities for this application, the main screen and the activity the creation and saviing of a new expense to the database.
 ![Image of MainActivity](https://i.imgur.com/FjAobBl.jpg) ![Image of AddExpense](https://i.imgur.com/fHznd3l.jpg)
