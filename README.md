@@ -18,11 +18,12 @@ This demonstration showcases:
 MainActivity displays the following items:
 
 * The total sum of all the saved expenses
-* A RecyclerView list of all the saved expenses along with relevant information such as expense name, amount, and date.
+* A RecyclerView list of all the saved expenses along with relevant information such as expense name, amount, and date. 
 
-![Image of MainActivity](https://i.imgur.com/FjAobBl.jpg) 
+The items in the RecyclerView list are sorted before being displayed and out of date expenses are updated when this activity is resumed.
 
 This activity also allows the delete an expense by long clicking an expense.
 
+![Image of MainActivity](https://i.imgur.com/FjAobBl.jpg) 
 
 ![Image of AddExpense](https://i.imgur.com/fHznd3l.jpg)
