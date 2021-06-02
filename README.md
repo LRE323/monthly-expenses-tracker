@@ -14,6 +14,7 @@ This demonstration showcases:
 * Sorting the expenses by date
 
 
-The two activities for this application, the main screen and the activity the creation and saviing of a new expense to the database.
+The two activities for this application.
+The activity on the left is the home screen and the activity on the right allows the user to create a new expense and save it to the Room database.
 
 ![Image of MainActivity](https://i.imgur.com/FjAobBl.jpg) ![Image of AddExpense](https://i.imgur.com/fHznd3l.jpg)
