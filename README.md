@@ -13,6 +13,7 @@ This demonstration showcases:
 * Deleting an expense
 * Sorting the expenses by date
 
+
 ### MainActivity
 
 MainActivity displays the following items:
