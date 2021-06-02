@@ -15,4 +15,11 @@ This demonstration showcases:
 
 ### MainActivity
 
-![Image of MainActivity](https://i.imgur.com/FjAobBl.jpg) ![Image of AddExpense](https://i.imgur.com/fHznd3l.jpg)
+![Image of MainActivity](https://i.imgur.com/FjAobBl.jpg) 
+
+MainActivity displays the following items:
+
+* The total sum of all the saved expenses
+* A RecyclerView list of all the saved expenses along with relevant information such as expense name, amount, and date.
+
+![Image of AddExpense](https://i.imgur.com/fHznd3l.jpg)
