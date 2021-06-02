@@ -22,7 +22,7 @@ MainActivity displays the following items:
 
 The items in the RecyclerView list are sorted before being displayed and out of date expenses are updated when this activity is resumed.
 
-This activity also allows the delete an expense by long clicking an expense.
+The user can long click and delete an expense in the RecyclerView.
 
 ![Image of MainActivity](https://i.imgur.com/FjAobBl.jpg) 
 
