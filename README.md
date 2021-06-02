@@ -28,6 +28,10 @@ The user can long click and delete an expense in the RecyclerView.
 ![Image of MainActivity](https://i.imgur.com/FjAobBl.jpg) 
 
 
-### AddExpenseActivity
+### Creating and Saving a New Expense
+
+This activity allows the user to input the necessary information required to create a new expense and save it to the Room database.
+
+Input validation is executed before attempting to create a new expense.
 
 ![Image of AddExpense](https://i.imgur.com/fHznd3l.jpg)
