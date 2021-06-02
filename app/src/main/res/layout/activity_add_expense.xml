@@ -20,9 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/dodger_silver"
+            android:autofillHints="@string/expense_name_input_hint"
+            android:background="@color/silver"
             android:ems="10"
-            android:hint="Enter expense name"
+            android:hint="@string/expense_name_input_hint"
             android:inputType="textAutoCorrect|textCapSentences"
             android:padding="10dp" />
 
@@ -31,9 +32,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/dodger_silver"
+            android:autofillHints="@string/expense_amount_input_hint"
+            android:background="@color/silver"
             android:ems="10"
-            android:hint="Enter expense amount"
+            android:hint="@string/expense_amount_input_hint"
             android:inputType="numberDecimal"
             android:padding="10dp" />
 
@@ -43,8 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:background="@color/dodger_silver"
-            android:hint="Choose a date"
+            android:background="@color/silver"
+            android:hint="@string/expense_date_input_text"
             android:onClick="openDatePickerDialog"
             android:padding="10dp" />
 
@@ -53,9 +55,9 @@
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:layout_margin="10dp"
-            android:backgroundTint="@color/android_green"
+            android:backgroundTint="@color/dodger_blue"
             android:onClick="addExpense"
-            android:text="Add new monthly expense" />
+            android:text="@string/add_expense_button_text" />
     </LinearLayout>
 
 

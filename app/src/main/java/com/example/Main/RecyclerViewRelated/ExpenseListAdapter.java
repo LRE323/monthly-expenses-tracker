@@ -1,4 +1,4 @@
-package com.example.Main;
+package com.example.Main.RecyclerViewRelated;
 
 import android.content.Context;
 import android.view.ViewGroup;
@@ -109,7 +109,7 @@ public class ExpenseListAdapter extends ListAdapter<Expense, ExpenseViewHolder> 
      * just the second of these, which allows separation of code that indexes into an array or List
      * from the presentation-layer and content specific diffing code.
      */
-    static class ExpenseDiff extends DiffUtil.ItemCallback<Expense> {
+    public static class ExpenseDiff extends DiffUtil.ItemCallback<Expense> {
 
         /**
          * Called to check whether two objects represent the same item.

@@ -14,6 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.Main.ExpenseUtility.ExpenseDateUpdater;
+import com.example.Main.ExpenseUtility.ExpenseListSorter;
+import com.example.Main.RecyclerViewRelated.ExpenseListAdapter;
+import com.example.Main.RecyclerViewRelated.ExpenseViewHolder;
 import com.example.monthlyexpensestracker.R;
 
 import java.util.List;

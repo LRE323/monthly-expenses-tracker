@@ -1,4 +1,4 @@
-package com.example.Main;
+package com.example.Main.ExpenseUtility;
 
 import java.util.Calendar;
 import java.util.List;
@@ -7,7 +7,7 @@ import RoomDatabase.Expense;
 
 public class ExpenseListSorter {
 
-    ExpenseListSorter() {
+    public ExpenseListSorter() {
 
     }
 

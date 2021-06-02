@@ -41,6 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
             android:padding="5dp"
             android:text="@string/header_percent_no_monthly_income"
@@ -51,7 +52,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@color/android_green" />
+            android:background="@color/silver" />
 
 
     </LinearLayout>
@@ -63,7 +64,7 @@
         android:layout_marginBottom="5dp"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        app:layout_constraintBottom_toTopOf="@id/testFab"
+        app:layout_constraintBottom_toTopOf="@id/openAddNewExpense"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headersHolder">
@@ -72,14 +73,16 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/testFab"
+        android:id="@+id/openAddNewExpense"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:clickable="true"
+        android:contentDescription="@string/floating_action_button_content_description"
+        android:focusable="true"
         android:onClick="openAddNewExpenseActivity"
-        app:backgroundTint="@color/android_green"
+        app:backgroundTint="@color/dodger_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

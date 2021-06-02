@@ -4,4 +4,9 @@
     <string name="expense_amount">$ %1$s</string>
     <string name="title_activity_add_expense">AddExpense</string>
     <string name="header_percent_no_monthly_income">Click here to set monthly income</string>
+    <string name="expense_name_input_hint">Enter expense name</string>
+    <string name="expense_amount_input_hint">Enter expense amount</string>
+    <string name="add_expense_button_text">Add new expense</string>
+    <string name="expense_date_input_text">Select date</string>
+    <string name="floating_action_button_content_description">A floating action button with a plus sign.</string>
 </resources>

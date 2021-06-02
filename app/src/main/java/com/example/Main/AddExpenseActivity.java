@@ -130,12 +130,13 @@ public class AddExpenseActivity extends AppCompatActivity implements DatePickerD
         dialogFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
-    @Override
+
     /**
      * Called when the user clicks "OK" on the DatePickerDialog.
      *
      * Sets the chosen date as the text for tvExpenseDateInput
      */
+    @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
         // Use the parameters passed (year, month, & dayOfMonth) to create a new Calendar object.
