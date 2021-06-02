@@ -13,4 +13,4 @@ This demonstration showcases:
 * Deleting an expense
 * Sorting the expenses by date
 
-![Image of MainActivity](https://i.imgur.com/iS8hbcc.jpg)
+![Image of MainActivity](https://i.imgur.com/FjAobBl.jpg)
