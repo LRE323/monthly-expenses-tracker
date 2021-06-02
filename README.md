@@ -14,9 +14,9 @@ This demonstration showcases:
 * Sorting the expenses by date
 
 
-### MainActivity
+### Home Screen
 
-MainActivity displays the following items:
+This activity displays the following items:
 
 * The total sum of all the saved expenses
 * A RecyclerView list of all the saved expenses along with relevant information such as expense name, amount, and date. 
@@ -26,5 +26,8 @@ The items in the RecyclerView list are sorted before being displayed and out of 
 The user can long click and delete an expense in the RecyclerView.
 
 ![Image of MainActivity](https://i.imgur.com/FjAobBl.jpg) 
+
+
+### AddExpenseActivity
 
 ![Image of AddExpense](https://i.imgur.com/fHznd3l.jpg)
