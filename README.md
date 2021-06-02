@@ -13,8 +13,6 @@ This demonstration showcases:
 * Deleting an expense
 * Sorting the expenses by date
 
-
-The two activities for this application.
-The activity on the left is the home screen and the activity on the right allows the user to create a new expense and save it to the Room database.
+MainActivity
 
 ![Image of MainActivity](https://i.imgur.com/FjAobBl.jpg) ![Image of AddExpense](https://i.imgur.com/fHznd3l.jpg)
