@@ -1,4 +1,4 @@
-package com.example.Main;
+package com.github.main;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -14,16 +14,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.Main.ExpenseUtility.ExpenseDateUpdater;
-import com.example.Main.ExpenseUtility.ExpenseListSorter;
-import com.example.Main.RecyclerViewRelated.ExpenseListAdapter;
-import com.example.Main.RecyclerViewRelated.ExpenseViewHolder;
-import com.example.monthlyexpensestracker.R;
+import com.github.main.ExpenseUtility.ExpenseDateUpdater;
+import com.github.main.ExpenseUtility.ExpenseListSorter;
+import com.github.main.RecyclerViewRelated.ExpenseListAdapter;
+import com.github.main.RecyclerViewRelated.ExpenseViewHolder;
+import com.github.LRE323.R;
 
 import java.util.List;
 
-import RoomDatabase.Expense;
-import RoomDatabase.ExpenseViewModel;
+import com.github.main.RoomDatabase.Expense;
+import com.github.main.RoomDatabase.ExpenseViewModel;
 
 public class MainActivity extends AppCompatActivity implements ExpenseViewHolder.OnExpenseListener {
 

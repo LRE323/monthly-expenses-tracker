@@ -1,4 +1,4 @@
-package com.example.Main.RecyclerViewRelated;
+package com.github.main.RecyclerViewRelated;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,9 +8,9 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.monthlyexpensestracker.R;
+import com.github.LRE323.R;
 
-import RoomDatabase.Expense;
+import com.github.main.RoomDatabase.Expense;
 
 /**
  * The ViewHolder class for the RecyclerView in MainActivity.

@@ -1,4 +1,4 @@
-package com.example.Main;
+package com.github.main;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;

@@ -1,4 +1,4 @@
-package RoomDatabase;
+package com.github.main.RoomDatabase;
 
 import android.content.Context;
 
@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
@@ -18,7 +17,7 @@ import java.util.concurrent.Executors;
     exportSchema = false
 )
 
-// The database class for Room must be abstract and extend RoomDatabase.
+// The database class for Room must be abstract and extend com.github.main.RoomDatabase.
 public abstract class ExpenseRoomDatabase extends RoomDatabase {
 
     // Declaring an abstract method.
@@ -36,7 +35,7 @@ public abstract class ExpenseRoomDatabase extends RoomDatabase {
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     // This method returns the singleton. It will create the database the first time it's accessed,
-    // using Room's database builder to create a RoomDatabase object in the application context
+    // using Room's database builder to create a com.github.main.RoomDatabase object in the application context
     // from the ExpenseRoomDatabase class and names it "expense_database".
     static ExpenseRoomDatabase getDatabase(final Context context) {
 

@@ -1,12 +1,12 @@
-package com.example.Main;
+package com.github.main;
 
-import com.example.Main.ExpenseUtility.ExpenseDateUpdater;
+import com.github.main.ExpenseUtility.ExpenseDateUpdater;
 
 import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import RoomDatabase.Expense;
+import com.github.main.RoomDatabase.Expense;
 
 public class ExpenseDateUpdaterTest extends TestCase {
     private ExpenseDateUpdater expenseDateUpdater = new ExpenseDateUpdater(null);

@@ -1,10 +1,10 @@
-package com.example.Main.ExpenseUtility;
+package com.github.main.ExpenseUtility;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import RoomDatabase.Expense;
+import com.github.main.RoomDatabase.Expense;
 
 /**
  * This class is used to decide which case will be executed by ExpenseDateUpdater in order to update
@@ -162,7 +162,7 @@ public class ExpenseDateCaseDecider {
          * A leap year is a year evenly divisible by 4.
          *
          * "The Gregorian calendar also stipulates that a years evenly divisible by 100
-         * (for example, 1900) is a leap year only if it is ALSO evenly divisible by 400."
+         * (for github, 1900) is a leap year only if it is ALSO evenly divisible by 400."
          *
          */
         if ((this.currentCalendarYearField % 100 == 0)

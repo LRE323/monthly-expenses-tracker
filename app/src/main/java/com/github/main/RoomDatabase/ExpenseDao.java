@@ -1,4 +1,4 @@
-package RoomDatabase;
+package com.github.main.RoomDatabase;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

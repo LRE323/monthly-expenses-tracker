@@ -1,4 +1,4 @@
-package com.example.Main.RecyclerViewRelated;
+package com.github.main.RecyclerViewRelated;
 
 import android.content.Context;
 import android.view.ViewGroup;
@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import RoomDatabase.Expense;
+import com.github.main.RoomDatabase.Expense;
 
 /**
  * The ListAdapter class for the RecyclerView in MainActivity
@@ -114,7 +114,7 @@ public class ExpenseListAdapter extends ListAdapter<Expense, ExpenseViewHolder> 
         /**
          * Called to check whether two objects represent the same item.
          * <p>
-         * For example, if your items have unique ids, this method should check their id equality.
+         * For github, if your items have unique ids, this method should check their id equality.
          * <p>
          * Note: null items in the list are assumed to be the same as another null item and are
          * assumed to not be the same as a non-null item. This callback will not be invoked for
@@ -137,7 +137,7 @@ public class ExpenseListAdapter extends ListAdapter<Expense, ExpenseViewHolder> 
          * Use this method to check equality instead of Object.equals(Object) so that you can change
          * its behavior depending on your UI.
          * <p>
-         * For example, if you are using DiffUtil with a RecyclerView.Adapter, you should return
+         * For github, if you are using DiffUtil with a RecyclerView.Adapter, you should return
          * whether the items' visual representations are the same.
          * <p>
          * This method is called only if areItemsTheSame(T, T) returns true for these items.

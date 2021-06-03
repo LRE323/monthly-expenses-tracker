@@ -1,4 +1,4 @@
-package com.example.monthlyexpensestracker;
+package com.github.LRE323;
 
 import org.junit.Test;
 

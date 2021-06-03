@@ -1,9 +1,9 @@
-package com.example.Main.ExpenseUtility;
+package com.github.main.ExpenseUtility;
 
 import java.util.Calendar;
 import java.util.List;
 
-import RoomDatabase.Expense;
+import com.github.main.RoomDatabase.Expense;
 
 public class ExpenseListSorter {
 

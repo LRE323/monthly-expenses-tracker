@@ -1,4 +1,4 @@
-package com.example.Main.ExpenseUtility;
+package com.github.main.ExpenseUtility;
 
 import android.util.Log;
 
@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import RoomDatabase.Expense;
-import RoomDatabase.ExpenseViewModel;
+import com.github.main.RoomDatabase.Expense;
+import com.github.main.RoomDatabase.ExpenseViewModel;
 
 /**
  * A class that updates outdated Expenses saved in the Room database.
