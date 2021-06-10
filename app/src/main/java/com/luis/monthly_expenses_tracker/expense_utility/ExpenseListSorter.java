@@ -1,9 +1,9 @@
-package com.github.main.ExpenseUtility;
+package com.luis.monthly_expenses_tracker.expense_utility;
 
 import java.util.Calendar;
 import java.util.List;
 
-import com.github.main.RoomDatabase.Expense;
+import com.luis.monthly_expenses_tracker.room.Expense;
 
 public class ExpenseListSorter {
 

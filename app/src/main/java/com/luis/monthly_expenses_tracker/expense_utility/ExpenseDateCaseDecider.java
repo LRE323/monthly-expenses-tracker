@@ -1,10 +1,10 @@
-package com.github.main.ExpenseUtility;
+package com.luis.monthly_expenses_tracker.expense_utility;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.github.main.RoomDatabase.Expense;
+import com.luis.monthly_expenses_tracker.room.Expense;
 
 /**
  * This class is used to decide which case will be executed by ExpenseDateUpdater in order to update

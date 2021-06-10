@@ -1,4 +1,4 @@
-package com.github.main;
+package com.luis.monthly_expenses_tracker.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -14,16 +14,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.main.ExpenseUtility.ExpenseDateUpdater;
-import com.github.main.ExpenseUtility.ExpenseListSorter;
-import com.github.main.RecyclerViewRelated.ExpenseListAdapter;
-import com.github.main.RecyclerViewRelated.ExpenseViewHolder;
-import com.github.LRE323.R;
+import com.luis.monthly_expenses_tracker.expense_utility.ExpenseDateUpdater;
+import com.luis.monthly_expenses_tracker.expense_utility.ExpenseListSorter;
+import com.luis.monthly_expenses_tracker.adapter.ExpenseListAdapter;
+import com.luis.monthly_expenses_tracker.viewholder.ExpenseViewHolder;
+import com.luis.test.R;
 
 import java.util.List;
 
-import com.github.main.RoomDatabase.Expense;
-import com.github.main.RoomDatabase.ExpenseViewModel;
+import com.luis.monthly_expenses_tracker.room.Expense;
+import com.luis.monthly_expenses_tracker.room.ExpenseViewModel;
 
 public class MainActivity extends AppCompatActivity implements ExpenseViewHolder.OnExpenseListener {
 

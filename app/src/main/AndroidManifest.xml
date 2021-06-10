@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.github.LRE323">
+    package="com.luis.test">
 
     <application
         android:allowBackup="true"
@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MonthlyExpensesTracker">
         <activity
-            android:name="com.github.main.AddExpenseActivity"
+            android:name="com.luis.monthly_expenses_tracker.activity.AddExpenseActivity"
             android:label="@string/title_activity_add_expense"
             android:theme="@style/Theme.MonthlyExpensesTracker.NoActionBar"></activity>
-        <activity android:name="com.github.main.MainActivity">
+        <activity android:name="com.luis.monthly_expenses_tracker.activity.MainActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
