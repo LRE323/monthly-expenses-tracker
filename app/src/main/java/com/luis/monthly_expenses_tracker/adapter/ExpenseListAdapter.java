@@ -1,4 +1,4 @@
-package com.github.main.RecyclerViewRelated;
+package com.luis.monthly_expenses_tracker.adapter;
 
 import android.content.Context;
 import android.view.ViewGroup;
@@ -7,7 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import com.github.main.RoomDatabase.Expense;
+import com.luis.monthly_expenses_tracker.viewholder.ExpenseViewHolder;
+import com.luis.monthly_expenses_tracker.room.Expense;
 
 /**
  * The ListAdapter class for the RecyclerView in MainActivity

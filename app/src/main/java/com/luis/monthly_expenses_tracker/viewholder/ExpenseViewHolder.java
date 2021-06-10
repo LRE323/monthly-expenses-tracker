@@ -1,4 +1,4 @@
-package com.github.main.RecyclerViewRelated;
+package com.luis.monthly_expenses_tracker.viewholder;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,9 +8,9 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.LRE323.R;
+import com.luis.test.R;
 
-import com.github.main.RoomDatabase.Expense;
+import com.luis.monthly_expenses_tracker.room.Expense;
 
 /**
  * The ViewHolder class for the RecyclerView in MainActivity.
@@ -96,7 +96,7 @@ public class ExpenseViewHolder extends RecyclerView.ViewHolder implements View.O
      * @param onExpenseListener The onExpenseListener interface for this ExpenseViewHolder.
      * @return A new ExpenseViewHolder.
      */
-    static ExpenseViewHolder create(ViewGroup parent, OnExpenseListener onExpenseListener) {
+    public static ExpenseViewHolder create(ViewGroup parent, OnExpenseListener onExpenseListener) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.expenselist_item, parent, false);
         return new ExpenseViewHolder(view, onExpenseListener);

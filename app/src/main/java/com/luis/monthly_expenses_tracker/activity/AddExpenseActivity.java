@@ -1,4 +1,4 @@
-package com.github.main;
+package com.luis.monthly_expenses_tracker.activity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -12,12 +12,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
-import com.github.LRE323.R;
+import com.luis.monthly_expenses_tracker.fragment.DatePickerFragment;
+import com.luis.test.R;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 
-import com.github.main.RoomDatabase.Expense;
+import com.luis.monthly_expenses_tracker.room.Expense;
 
 /**
  * This class allows the user to enter information needed create an Expense, creates it, and then

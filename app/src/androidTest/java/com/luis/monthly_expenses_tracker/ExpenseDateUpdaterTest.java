@@ -1,12 +1,12 @@
-package com.github.main;
+package com.luis.monthly_expenses_tracker;
 
-import com.github.main.ExpenseUtility.ExpenseDateUpdater;
+import com.luis.monthly_expenses_tracker.expense_utility.ExpenseDateUpdater;
 
 import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import com.github.main.RoomDatabase.Expense;
+import com.luis.monthly_expenses_tracker.room.Expense;
 
 public class ExpenseDateUpdaterTest extends TestCase {
     private ExpenseDateUpdater expenseDateUpdater = new ExpenseDateUpdater(null);

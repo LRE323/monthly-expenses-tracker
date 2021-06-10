@@ -1,4 +1,4 @@
-package com.github.main.RoomDatabase;
+package com.luis.monthly_expenses_tracker.room;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

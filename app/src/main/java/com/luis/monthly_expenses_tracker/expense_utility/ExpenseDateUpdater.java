@@ -1,4 +1,4 @@
-package com.github.main.ExpenseUtility;
+package com.luis.monthly_expenses_tracker.expense_utility;
 
 import android.util.Log;
 
@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.github.main.RoomDatabase.Expense;
-import com.github.main.RoomDatabase.ExpenseViewModel;
+import com.luis.monthly_expenses_tracker.room.Expense;
+import com.luis.monthly_expenses_tracker.room.ExpenseViewModel;
 
 /**
  * A class that updates outdated Expenses saved in the Room database.
