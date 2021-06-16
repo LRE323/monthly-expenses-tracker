@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -63,7 +64,14 @@ public class ExpenseViewModel extends AndroidViewModel {
      * @param calendar The time that expenseDate will be set to.
      */
     public void setExpenseDate(Expense expense, Calendar calendar) {
-        this.expenseRepository.setExpenseDate(expense, calendar);
+        // Create a new DateFormat object.
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
+
+        // Format the Calendar object into a string.
+        String expenseDate = dateFormat.format(calendar.getTime());
+
+        // Submit.
+        this.expenseRepository.setExpenseDate(expense.expenseName, expenseDate);
     }
 
     /**
