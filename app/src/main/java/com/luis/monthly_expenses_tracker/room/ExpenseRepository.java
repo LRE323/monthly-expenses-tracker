@@ -70,22 +70,14 @@ public class ExpenseRepository {
     }
 
     /**
-     * Sets the field expenseDate for the passed expense to the time in the calendar passed.
+     * Sets the field expenseDate for the expenseName passed.
      *
-     * @param expense The Expense for which expenseDate will be set.
-     * @param calendar The time that expenseDate will be set to.
+     * @param expenseName The name of the Expense for which expenseDate will be set.
+     * @param expenseDate The date that expenseDate will be set to.
      */
-    void setExpenseDate(Expense expense, Calendar calendar) {
+    void setExpenseDate(String expenseName, String expenseDate) {
         ExpenseRoomDatabase.databaseWriteExecutor.execute(() -> {
-
-            // Create a new DateFormat object.
-            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
-
-            // Format the Calendar object into a string.
-            String expenseDate = dateFormat.format(calendar.getTime());
-
-            // Submit.
-            expenseDao.setExpenseDate(expense.expenseName, expenseDate);
+            expenseDao.setExpenseDate(expenseName, expenseDate);
         });
     }
 
