@@ -3,7 +3,7 @@ An Android application that keeps track of your monthly expenses.
 
 Monthly Expenses Tracker can be [downloaded from the Google Play Store](https://play.google.com/store/apps/details?id=com.github.LRE323).
 
-This application is written in Java and uses Room as the database.
+This application is written in Java and uses Room.
 
 A video demonstration can be found [here](https://streamable.com/7d5nzz). 
 
